@@ -128,34 +128,169 @@ app.post('/write_recipe', (req,res)=>{
 				return;
 			}
 			//everything success
+			console.log("Recipe written");
 			db.query(sql_commit, (err,result)=>{});
 			res.send({success:true});
 		});
 	});
-	
 });
 
 
+//write review
+app.post('/write_review', (req,res)=>{
+	console.log(req.body);
 
+	var Id = req.body.Id;
+	var Content = db.escape(req.body.Content);
+	var Rating = req.body.Rating;
+	var USER_Username = db.escape(req.body.USER_Username);
+	var RECI_Title = db.escape(req.body.RECI_Title);
 
-
-/*------ Other stuff -----*/
-//create db
-app.get('/createdb',(req,res) =>{
-	let sql = 'CREATE DATABASE nodemysql';
-	db.query(sql, (err,result) =>{
-		if(err) throw err;
-		console.log(res);
-		res.send('database created');
+	var sql = `INSERT INTO REVIEW 
+				VALUES (${Id}, ${Content},${Rating},${USER_Username},${RECI_Title})`
+	db.query(sql, (err,result)=>{
+		if(err){
+			console.log(err);
+			res.send({success:false});
+			return;
+		}
+		console.log("Review written");
+		res.send({success:true});
 	});
 });
 
-//create table
-app.get('/create',()=>{
-	let sql = 'CREATE TABLE ' 
+
+//search for recipe method 1
+app.get("/search_recipe1", (req,res)=>{
+	console.log(req.body);
+
+	var min_difficulty = req.body.min_difficulty;
+	var max_difficulty = req.body.max_difficulty;
+	var min_cost = req.body.min_cost;
+	var max_cost = req.body.max_cost;
+	var min_time = req.body.min_time;
+	var max_time = req.body.max_time;
+
+	var sql = `SELECT *
+				FROM RECIPE
+				WHERE (Difficulty BETWEEN ${min_difficulty} AND ${max_difficulty}) AND 
+						(Total_cost BETWEEN ${min_cost} AND ${max_cost} AND
+						(Time BETWEEN ${min_time} AND ${max_time}))`
+	db.query(sql, (err,result)=>{
+		if(err){
+			console.log(err);
+			res.send({success:false});
+			return;
+		}
+		//create json array
+		var array = [];
+		result.map(function(item){
+			array.push({
+				"Title": item.Title,
+				"Instruction": item.Instruction,
+				"Time": item.Time,
+				"Difficulty": item.Difficulty,
+				"Total_cost": item.Total_cost,
+				"Picture_url": item.Picture_url,
+				"USER_Username": item.USER_Username
+			});
+		});
+		console.log(array);
+		console.log("Recipes retrieved");
+		res.send(array);
+	});
 });
 
 
+//search for recipe method 2(3 ingredients)
+app.get("/search_recipe2", (req,res)=>{
+	console.log(req.body);
+
+	var Ingredient1 = db.escape(req.body.Ingredient1);
+	var Ingredient2 = db.escape(req.body.Ingredient2);
+	var Ingredient3 = db.escape(req.body.Ingredient3);
+
+	var sql = `SELECT *
+				FROM RECIPE
+				WHERE Title IN (SELECT RECI_Title
+								FROM USES
+								WHERE INGR_Name = ${Ingredient1})
+								AND
+					  Title IN (SELECT RECI_Title
+								FROM USES
+								WHERE INGR_Name = ${Ingredient2})
+								AND
+					  Title IN (SELECT RECI_Title
+								FROM USES
+								WHERE INGR_Name = ${Ingredient3})
+				`
+	db.query(sql, (err,result)=>{
+		if(err){
+			console.log(err);
+			res.send({"success": false});
+			return;
+		}
+		console.log(result);
+		//create json array
+		var array = [];
+		result.map(function(item){
+			array.push({
+				"Title": item.Title,
+				"Instruction": item.Instruction,
+				"Time": item.Time,
+				"Difficulty": item.Difficulty,
+				"Total_cost": item.Total_cost,
+				"Picture_url": item.Picture_url,
+				"USER_Username": item.USER_Username
+			});
+		});
+		console.log(array);
+		console.log("Recipes retrieved");
+		res.send(array);
+	});
+});
+
+//update review(Id, Content, Rating)
+app.post("/update_review", (req,res)=>{
+	console.log(req.body);
+
+	var Id = req.body.Id;
+	var Content = db.escape(req.body.Content);
+	var Rating = req.body.Rating;
+
+	var sql = `UPDATE REVIEW SET Content = ${Content},Rating = ${Rating} WHERE Id = ${Id}`;
+	db.query(sql, (err,result)=>{
+		if(err){
+			console.log(err);
+			res.send({"success":false});
+			return;
+		}
+		console.log("updated successful");
+		res.send({"success":true});
+	});
+});
+
+//delete recipe(Title)
+app.post("/delete_recipe", (req,res)=>{
+	console.log(req.body);
+
+	var Title = db.escape(req.body.Title);
+
+	var sql = `DELETE FROM RECIPE
+				WHERE Title = ${Title}
+				`;
+	db.query(sql, (err,result)=>{
+		if(err){
+			console.log(err);
+			res.send({"success":false});
+			return;
+		}
+		console.log("delete successful");
+		res.send({"success":true});
+	});
+});
+
+/*------ Other stuff -----*/
 app.listen('3000', ()=> {
 	console.log("server started on 3000");
 });
