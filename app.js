@@ -79,8 +79,8 @@ app.post('/sign_in', (req, res) =>{
 			res.send({success: false});
 			return;
 		}
-		console.log(result);
-		if(Password == result[0]['Password']) {
+		console.log(typeof(Password), typeof(result[0].Password));
+		if(Password.slice(1,-1) == result[0].Password) {
 			res.send({success: true});
 			return;
 		}
@@ -116,7 +116,9 @@ app.post('/write_recipe', (req,res)=>{
 			return;
 		}
 	});
-
+	console.log(Instruction);
+	Instruction = Instruction.replace(", ","<NEXT>");
+	User = User.slice(1,-1);
 	//must add recipe first(with total cost 0)
 	var sql_insert2 = `INSERT INTO RECIPE 
 						VALUES (?,?,?,?,?,?,?)`;
