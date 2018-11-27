@@ -19,7 +19,7 @@ function set_recipe(title, cost, time, difficulty, rating, img_url, instructions
         recipe +=           '<li><div contenteditable>'+instructions[i]+'</div>';
     					}
         recipe +=   '</ol>'+
-        		  '<button class="redBtn">Save Changes</button>'+
+        		  '<button class="redBtn" id="SaveChangeBtn">Save Changes</button>'+
                   '</div>';
     $(".recipe").html(recipe);
     ingredient_fullset();
@@ -59,9 +59,12 @@ function save_changes(){
 
 	var instructions = extract_instructions();
 	var ingredients = extract_selected_ingredients();
+	var quantity = [];
+	for(var i=0; i < ingredients.length; i++)
+		quantity.push(1);
 
-	return {title: title, time: time, difficulty: difficulty, img_url: img_url, 
-			instructions: instructions, ingredients: ingredients};
+	return {Title: title, Time: time, Difficulty: difficulty, Picture_url: img_url, 
+			Instruction: instructions, Ingredients: ingredients, User: localStorage.getItem("userId"), Ingredients_quantity: quantity};
 }
 
 $(document).on('click', ".recipe-add", function(){
@@ -78,6 +81,15 @@ $(document).on('click', '.ingredient-card', function(){
 		$(this).removeClass('checked');
 	else
 		$(this).addClass('checked');
+})
+
+$(document).on('click', '#SaveChangeBtn', function(){
+	$.post('/write_recipe', save_changes(), function(res){
+		if(res.success)
+			alert("Your recipe is successfully uploaded.");
+		else
+			alert("Failed to upload your recipe.");
+	})
 })
 
 function init(){

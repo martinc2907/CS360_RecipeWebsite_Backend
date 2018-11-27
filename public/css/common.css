@@ -247,6 +247,14 @@ body{
 	cursor: pointer;
 }
 
+#sign-up{
+	color: coral;
+	text-decoration: underline;
+	cursor: pointer;
+	margin-top: 10px;
+	user-select: none;
+}
+
 .modal-footer {
     padding: 2px 16px;
     background-color: #5cb85c;
