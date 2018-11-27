@@ -55,7 +55,7 @@ app.post('/create_user', (req,res) =>{
 
 	var Username = req.body.Username;	//escape to keep the quote.
 	var Password = req.body.Password;
-	var sql = `INSERT INTO USER (Username, Password) VALUES (?, ?)`;
+	var sql = `INSERT INTO USER VALUES (?, ?)`;
 	db.query(sql, [Username, Password], (err,result)=>{
 		if(err){
 			console.log(err);
