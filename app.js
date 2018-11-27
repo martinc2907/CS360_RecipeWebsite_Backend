@@ -66,6 +66,30 @@ app.post('/create_user', (req,res) =>{
 	});
 });
 
+// Sign in
+app.post('/sign_in', (req, res) =>{
+	console.log(req.body);
+
+	var Username = db.escape(req.body.Username);
+	var Password = db.escape(req.body.Password);
+	var sql = `SELECT Password FROM USER WHERE Username=${Username}`;
+	db.query(sql, (err, result)=>{
+		if(err){
+			console.log(err);
+			res.send({success: false});
+			return;
+		}
+		console.log(typeof(Password), typeof(result[0].Password));
+		if(Password.slice(1,-1) == result[0].Password) {
+			res.send({success: true});
+			return;
+		}
+		else {
+			res.send({success: false});
+		}
+	})
+})
+
 
 //Write Recipe
 app.post('/write_recipe', (req,res)=>{
@@ -93,11 +117,13 @@ app.post('/write_recipe', (req,res)=>{
 			return;
 		}
 	});
-
+	console.log(Instruction);
+	Instruction = Instruction.replace(", ","<NEXT>");
+	User = User.slice(1,-1);
 	//must add recipe first(with total cost 0)
 	var sql_insert2 = `INSERT INTO RECIPE 
-						VALUES (${Title}, ${Instruction},${Time},${Difficulty},${Total_cost},${Picture_url},${User},${Rating}`;
-	db.query(sql_insert2, (err,result)=>{
+						VALUES (?,?,?,?,?,?,?)`;
+	db.query(sql_insert2, [Title, Instruction, Time, Difficulty, Total_cost, Picture_url, User, Rating], (err,result)=>{
 		if(err){
 			console.log(err);
 			//SHOULD ROLL BACK. do start/commit/end transaction?
@@ -252,6 +278,42 @@ app.get("/search_recipe2", (req,res)=>{
 					  Title IN (SELECT RECI_Title
 								FROM USES
 								WHERE INGR_Name = ${Ingredient3})
+				`
+	db.query(sql, (err,result)=>{
+		if(err){
+			console.log(err);
+			res.send({"success": false});
+			return;
+		}
+		console.log(result);
+		//create json array
+		var array = [];
+		result.map(function(item){
+			array.push({
+				"Title": item.Title,
+				"Instruction": item.Instruction,
+				"Time": item.Time,
+				"Difficulty": item.Difficulty,
+				"Total_cost": item.Total_cost,
+				"Picture_url": item.Picture_url,
+				"USER_Username": item.USER_Username
+			});
+		});
+		console.log(array);
+		console.log("Recipes retrieved");
+		res.send(array);
+	});
+});
+
+// search recipe with name
+app.get("/search_recipe3", (req,res)=>{
+	console.log(req.body);
+
+	var title = db.escape(req.body.title);
+
+	var sql = `SELECT *
+				FROM RECIPE
+				WHERE Title = ${title}
 				`
 	db.query(sql, (err,result)=>{
 		if(err){
