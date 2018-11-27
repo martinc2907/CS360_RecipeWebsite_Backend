@@ -1,6 +1,7 @@
 const express = require('express');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
+const session = require('express-session');
 
 //create connection
 const db = mysql.createConnection({
@@ -11,18 +12,33 @@ const db = mysql.createConnection({
 });
 
 //connect to mysql
-db.connect((err) => {
+/*db.connect((err) => {
 	if(err){
 		throw err;
 	}
 	console.log("mysql connection");
-});
+});*/
 
 //set up app
 const app = express();
 app.use(bodyParser.json());	//json object in req.body
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+app.engine('html', require('ejs').renderFile);
+app.use(express.static('public'));
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
+app.use(session({
+	secret: 'alfalw;l12#!@312#!',
+	resave: false,
+	saveUninitialized: true
+}));
 
+/*------- Frontend pages ------*/
+app.get('/', (req, res) => {
+	res.render('home');
+});
 
 /*----- Supported queries -----*/
 //Create user

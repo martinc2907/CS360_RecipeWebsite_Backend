@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/recipe.css">
+        <link rel="stylesheet" type="text/css" href="css/common.css">
+        <link href="https://fonts.googleapis.com/css?family=Ranga" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:100" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <% include ./header.ejs %>
+        <div>
+            <div class="main-tab">
+                <div class="recipe"></div>
+            </div>
+            <div class="side-tab">
+                <div class="side-content">
+                    <div class="review-box">
+                        <textarea class="review-text" rows="4" autofocus></textarea>
+                        <div style="text-align: right">
+                            Rating <input type="number" value="3">
+                            <button class="redBtn" style="padding: 4px; font-size: 12px;">Upload Review</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="side-content" id="otherreviews"></div>
+            </div>
+        </div>
+    </body>
+    <script src="recipe.js"></script>
+</html>

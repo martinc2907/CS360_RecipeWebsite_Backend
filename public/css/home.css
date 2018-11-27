@@ -1,0 +1,66 @@
+.card{
+	width: 240px;
+	display: inline-block;
+	vertical-align: top;
+	cursor: pointer;
+	margin: 8px;
+	position: relative;
+	text-align: left;
+	border: 0.5px solid #ccc;
+	border-radius: 5px;
+	overflow: hidden;
+}
+
+.card > .footer{
+	padding: 8px;
+	font-family: 'Roboto', sans-serif;
+}
+
+.card > .footer > div{
+	font-size: 12px;
+}
+
+.card > .footer > .cost:after{
+	content: " won";
+}
+
+.card > .footer > .cost:before{
+	content: "Cost: ";
+	font-weight: bold;
+}
+
+.card > .footer > .time:after{
+	content: " min";
+}
+
+.card > .footer > .time:before{
+	content: "Time: ";
+	font-weight: bold;
+}
+
+.card > .footer > .difficulty:before{
+	content: "Difficulty: ";
+	font-weight: bold;
+}
+
+.card > .footer > .rating:before{
+	content: "Rating: ";
+	font-weight: bold;
+}
+
+.card > .title{
+	position: absolute;
+	top: 210px;
+	left: 10px;
+	font-size: 36px;
+	color: white;
+	text-shadow: 0 0 3px black;
+	font-weight: bold;
+	width: calc(100% - 20px);
+}
+
+.card > img{
+	width: 100%;
+	height: 270px;
+	object-fit: cover;
+}
