@@ -5,19 +5,19 @@ const session = require('express-session');
 
 //create connection
 const db = mysql.createConnection({
-	host : 'localhost',
-	user : 'root',
-	password : 'password',
+	host : 'jihye-mysql.cmlpaiveb1r5.us-east-2.rds.amazonaws.com',
+	user : 'jihye',
+	password : 'makefood',
 	database: 'recipe'
 });
 
 //connect to mysql
-/*db.connect((err) => {
+db.connect((err) => {
 	if(err){
 		throw err;
 	}
 	console.log("mysql connection");
-});*/
+});
 
 //set up app
 const app = express();
