@@ -214,14 +214,14 @@ app.post('/write_review', (req,res)=>{
 app.post("/search_recipe1",  bodyParser.json(), (req,res)=>{
 	console.log(req.body);
 
-	var min_difficulty = req.body.min_difficulty;
-	var max_difficulty = req.body.max_difficulty;
-	var min_cost = req.body.min_cost;
-	var max_cost = req.body.max_cost;
-	var min_time = req.body.min_time;
-	var max_time = req.body.max_time;
-	var min_rating = req.body.min_rating;
-	var max_rating = req.body.max_rating;
+	var min_difficulty = Number(req.body.min_difficulty);
+	var max_difficulty = Number(req.body.max_difficulty);
+	var min_cost = Number(req.body.min_cost);
+	var max_cost = Number(req.body.max_cost);
+	var min_time = Number(req.body.min_time);
+	var max_time = Number(req.body.max_time);
+	var min_rating = Number(req.body.min_rating);
+	var max_rating = Number(req.body.max_rating);
 
 	var sql = `SELECT *
 				FROM RECIPE
