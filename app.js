@@ -79,7 +79,8 @@ app.post('/sign_in', (req, res) =>{
 			res.send({success: false});
 			return;
 		}
-		if(Password == result[0]['Password']) {
+		console.log(typeof(Password), typeof(result[0].Password));
+		if(Password.slice(1,-1) == result[0].Password) {
 			res.send({success: true});
 			return;
 		}
@@ -115,11 +116,13 @@ app.post('/write_recipe', (req,res)=>{
 			return;
 		}
 	});
-
+	console.log(Instruction);
+	Instruction = Instruction.replace(", ","<NEXT>");
+	User = User.slice(1,-1);
 	//must add recipe first(with total cost 0)
 	var sql_insert2 = `INSERT INTO RECIPE 
-						VALUES (${Title}, ${Instruction},${Time},${Difficulty},${Total_cost},${Picture_url},${User})`;
-	db.query(sql_insert2, (err,result)=>{
+						VALUES (?,?,?,?,?,?,?)`;
+	db.query(sql_insert2,[Title, Instruction, Time, Difficulty, Total_cost, Picture_url, User], (err,result)=>{
 		if(err){
 			console.log(err);
 			//SHOULD ROLL BACK. do start/commit/end transaction?
