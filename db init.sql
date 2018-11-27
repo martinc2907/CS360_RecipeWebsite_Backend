@@ -14,7 +14,7 @@ CREATE TABLE RECIPE(
 	Difficulty INT,
 	Total_cost INT,
 	Picture_url VARCHAR(100), 
-	Rating: INT,
+	Rating INT,
 	USER_Username VARCHAR(15) NOT NULL,
 	PRIMARY KEY(Title),
 	FOREIGN KEY(USER_Username) REFERENCES USER(Username)
@@ -34,7 +34,6 @@ CREATE TABLE REVIEW(
 CREATE TABLE INGREDIENT(
 	Name VARCHAR(15) NOT NULL,
 	Cost INT,
-	Rating INT,
 	PRIMARY KEY(Name)
 );
 
