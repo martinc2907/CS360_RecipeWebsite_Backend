@@ -121,9 +121,8 @@ app.post('/write_recipe', (req,res)=>{
 	Instruction = Instruction.join("<NEXT>");
 	console.log(User);
 	//must add recipe first(with total cost 0)
-	var sql_insert2 = `INSERT INTO RECIPE 
-						VALUES (?,?,?,?,?,?,?,?)`;
-	db.query(sql_insert2, [Title, Instruction, Time, Difficulty, Total_cost, Picture_url, User, Rating], (err,result)=>{
+	var sql_insert2 = `INSERT INTO RECIPE VALUES (?,?,?,?,?,?,${db.escape(User)},?)`;
+	db.query(sql_insert2, [Title, Instruction, Time, Difficulty, Total_cost, Picture_url, Rating], (err,result)=>{
 		if(err){
 			console.log(err);
 			//SHOULD ROLL BACK. do start/commit/end transaction?
