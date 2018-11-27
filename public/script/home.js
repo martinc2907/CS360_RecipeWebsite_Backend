@@ -45,14 +45,14 @@ $(document).on('click', '#filter2', function(){
 })
 
 function filter1(){
-    var min_cost = $(".side-content:eq(0) > input:eq(0)").val();
-    var max_cost = $(".side-content:eq(0) > input:eq(1)").val();
-    var min_time = $(".side-content:eq(1) > input:eq(0)").val();
-    var max_time = $(".side-content:eq(1) > input:eq(1)").val();
-    var min_difficulty = $(".side-content:eq(2) > input:eq(0)").val();
-    var max_difficulty = $(".side-content:eq(2) > input:eq(1)").val();
-    var min_rating = $(".side-content:eq(3) > input:eq(0)").val();
-    var max_rating = $(".side-content:eq(3) > input:eq(1)").val();
+    var min_cost = $(".side-content-box:eq(0) > .side-content > input:eq(0)").val();
+    var max_cost = $(".side-content-box:eq(0) > .side-content > input:eq(1)").val();
+    var min_time = $(".side-content-box:eq(1) > .side-content > input:eq(0)").val();
+    var max_time = $(".side-content-box:eq(1) > .side-content > input:eq(1)").val();
+    var min_difficulty = $(".side-content-box:eq(2) > .side-content > input:eq(0)").val();
+    var max_difficulty = $(".side-content-box:eq(2) > .side-content > input:eq(1)").val();
+    var min_rating = $(".side-content-box:eq(3) > .side-content > input:eq(0)").val();
+    var max_rating = $(".side-content-box:eq(3) > .side-content > input:eq(1)").val();
     if(min_cost.length && max_cost.length && min_time.length && max_time.length &&
         min_difficulty.length && max_difficulty.length && min_rating.length && max_rating.length){
         return {min_difficulty: min_difficulty, max_difficulty: min_difficulty, 
