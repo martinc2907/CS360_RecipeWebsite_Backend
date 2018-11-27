@@ -55,8 +55,8 @@ app.post('/create_user', (req,res) =>{
 
 	var Username = db.escape(req.body.Username);	//escape to keep the quote.
 	var Password = db.escape(req.body.Password);
-	var sql = `INSERT INTO USER (Username, Password) VALUES (${Username}, ${Password})`;
-	db.query(sql, (err,result)=>{
+	var sql = `INSERT INTO USER (Username, Password) VALUES (?, ?)`;
+	db.query(sql, [Username, Password], (err,result)=>{
 		if(err){
 			console.log(err);
 			res.send({success: false});//choose another combination
@@ -72,15 +72,15 @@ app.post('/sign_in', (req, res) =>{
 
 	var Username = db.escape(req.body.Username);
 	var Password = db.escape(req.body.Password);
-	var sql = `SELECT Password FROM USER WHERE Username=${Username}`;
-	db.query(sql, (err, result)=>{
+	var sql = `SELECT Password FROM USER WHERE Username=?`;
+	db.query(sql, [Username], (err, result)=>{
 		if(err){
 			console.log(err);
 			res.send({success: false});
 			return;
 		}
 		console.log(typeof(Password), typeof(result[0].Password));
-		if(Password.slice(1,-1) == result[0].Password) {
+		if(Password == result[0].Password) {
 			res.send({success: true});
 			return;
 		}
@@ -119,10 +119,10 @@ app.post('/write_recipe', (req,res)=>{
 	});
 	console.log(Instruction);
 	Instruction = Instruction.replace(", ","<NEXT>");
-	User = User.slice(1,-1);
+	
 	//must add recipe first(with total cost 0)
 	var sql_insert2 = `INSERT INTO RECIPE 
-						VALUES (?,?,?,?,?,?,?)`;
+						VALUES (?,?,?,?,?,?,?,?)`;
 	db.query(sql_insert2, [Title, Instruction, Time, Difficulty, Total_cost, Picture_url, User, Rating], (err,result)=>{
 		if(err){
 			console.log(err);
@@ -137,8 +137,8 @@ app.post('/write_recipe', (req,res)=>{
 	//add to USES
 	var length = Ingredients.length;
 	for(var i = 0; i < length; i++){
-		var sql_insert = `INSERT INTO USES VALUES (${db.escape(Ingredients[i])}, ${Title},${Ingredients_quantity[i]})`;
-		db.query(sql_insert, (err,result)=>{
+		var sql_insert = `INSERT INTO USES VALUES (?, ?, ?)`;
+		db.query(sql_insert, [db.escape(Ingredients[i]), Title, Ingredients_quantity[i]], (err,result)=>{
 			if(err){
 				console.log(err);
 				//SHOULD ROLL BACK. do start/commit/end transaction?
@@ -152,8 +152,8 @@ app.post('/write_recipe', (req,res)=>{
 	//calculate total cost
 	var sql_sum = `SELECT SUM(I.Cost*U.Ingredient_quantity) AS SUM
 					FROM INGREDIENT AS I,USES AS U 
-					WHERE U.RECI_Title = ${Title} AND U.INGR_Name = I.Name`;
-	db.query(sql_sum, (err,result)=>{
+					WHERE U.RECI_Title = ? AND U.INGR_Name = I.Name`;
+	db.query(sql_sum, [Title], (err,result)=>{
 		if(err){
 			console.log(err);
 			//SHOULD ROLL BACK. do start/commit/end transaction?
@@ -169,9 +169,9 @@ app.post('/write_recipe', (req,res)=>{
 
 		//Update recipe for total cost- do inside of callback for no async problem.
 		var sql_update = `UPDATE RECIPE
-						SET Total_cost = ${Total_cost}
-						WHERE Title = ${Title}`;
-		db.query(sql_update, (err,result)=>{
+						SET Total_cost = ?
+						WHERE Title = ?`;
+		db.query(sql_update, [Total_cost, Title], (err,result)=>{
 			if(err){
 				console.log(err);
 				db.query(sql_rollback, (err,result)=>{});
@@ -198,8 +198,8 @@ app.post('/write_review', (req,res)=>{
 	var RECI_Title = db.escape(req.body.RECI_Title);
 
 	var sql = `INSERT INTO REVIEW 
-				VALUES (${Id}, ${Content},${Rating},${USER_Username},${RECI_Title})`
-	db.query(sql, (err,result)=>{
+				VALUES (?, ?, ?, ?, ?)`
+	db.query(sql, [Id, Content, Rating, USER_Username, RECI_Title], (err,result)=>{
 		if(err){
 			console.log(err);
 			res.send({success:false});
@@ -226,11 +226,11 @@ app.get("/search_recipe1", (req,res)=>{
 
 	var sql = `SELECT *
 				FROM RECIPE
-				WHERE (Difficulty BETWEEN ${min_difficulty} AND ${max_difficulty}) AND 
-						(Total_cost BETWEEN ${min_cost} AND ${max_cost}) AND
-						(Total_cost BETWEEN ${min_rating} AND ${max_rating}) AND
-						(Time BETWEEN ${min_time} AND ${max_time}))`
-	db.query(sql, (err,result)=>{
+				WHERE (Difficulty BETWEEN ? AND ?) AND 
+						(Total_cost BETWEEN ? AND ?) AND
+						(Total_cost BETWEEN ? AND ?) AND
+						(Time BETWEEN ? AND ?))`
+	db.query(sql, [min_difficulty, max_difficulty, min_cost, max_cost, min_rating, max_rating, min_time, max_time], (err,result)=>{
 		if(err){
 			console.log(err);
 			res.send({success:false});
@@ -269,17 +269,17 @@ app.get("/search_recipe2", (req,res)=>{
 				FROM RECIPE
 				WHERE Title IN (SELECT RECI_Title
 								FROM USES
-								WHERE INGR_Name = ${Ingredient1})
+								WHERE INGR_Name = ?)
 								AND
 					  Title IN (SELECT RECI_Title
 								FROM USES
-								WHERE INGR_Name = ${Ingredient2})
+								WHERE INGR_Name = ?)
 								AND
 					  Title IN (SELECT RECI_Title
 								FROM USES
-								WHERE INGR_Name = ${Ingredient3})
+								WHERE INGR_Name = ?)
 				`
-	db.query(sql, (err,result)=>{
+	db.query(sql, [Ingredient1, Ingredient2, Ingredient3], (err,result)=>{
 		if(err){
 			console.log(err);
 			res.send({"success": false});
@@ -313,9 +313,9 @@ app.get("/search_recipe3", (req,res)=>{
 
 	var sql = `SELECT *
 				FROM RECIPE
-				WHERE Title = ${title}
+				WHERE Title = ?
 				`
-	db.query(sql, (err,result)=>{
+	db.query(sql, [title], (err,result)=>{
 		if(err){
 			console.log(err);
 			res.send({"success": false});
@@ -349,8 +349,8 @@ app.post("/update_review", (req,res)=>{
 	var Content = db.escape(req.body.Content);
 	var Rating = req.body.Rating;
 
-	var sql = `UPDATE REVIEW SET Content = ${Content},Rating = ${Rating} WHERE Id = ${Id}`;
-	db.query(sql, (err,result)=>{
+	var sql = `UPDATE REVIEW SET Content = ?, Rating = ? WHERE Id = ?`;
+	db.query(sql, [Content, Rating, Id], (err,result)=>{
 		if(err){
 			console.log(err);
 			res.send({"success":false});
@@ -368,9 +368,9 @@ app.post("/delete_recipe", (req,res)=>{
 	var Title = db.escape(req.body.Title);
 
 	var sql = `DELETE FROM RECIPE
-				WHERE Title = ${Title}
+				WHERE Title = ?
 				`;
-	db.query(sql, (err,result)=>{
+	db.query(sql, [Title], (err,result)=>{
 		if(err){
 			console.log(err);
 			res.send({"success":false});
