@@ -228,7 +228,7 @@ app.post("/search_recipe1",  bodyParser.json(), (req,res)=>{
 				WHERE (Difficulty BETWEEN ? AND ?) AND 
 						(Total_cost BETWEEN ? AND ?) AND
 						(Total_cost BETWEEN ? AND ?) AND
-						(Time BETWEEN ? AND ?))`
+						(Time BETWEEN ? AND ?)`
 	db.query(sql, [min_difficulty, max_difficulty, min_cost, max_cost, min_rating, max_rating, min_time, max_time], (err,result)=>{
 		if(err){
 			console.log(err);
