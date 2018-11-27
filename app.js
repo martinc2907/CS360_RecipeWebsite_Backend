@@ -12,12 +12,12 @@ const db = mysql.createConnection({
 });
 
 //connect to mysql
-/*db.connect((err) => {
+db.connect((err) => {
 	if(err){
 		throw err;
 	}
 	console.log("mysql connection");
-});*/
+});
 
 //set up app
 const app = express();

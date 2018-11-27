@@ -4,7 +4,6 @@ $(document).on('click', '.close', function(){
 
 $(document).on('click', '#sign-in', function(){
 	$("#signModal").show();
-	console.log("!");
 });
 
 window.onclick = function(event) {
@@ -60,7 +59,6 @@ function login_state(){
         $("#sign-out").hide();
     }else{
         $("#sign-in").hide();
-        $("#sign-up").hide();
     }
 }
 
@@ -68,6 +66,14 @@ $(document).on('click', "#sign-out", function(){
     localStorage.removeItem("userId");
     location.reload();
 })
+
+$(document).on('click', "#sign-up", function(){
+    if($("#SignUpBtn").length == 0 ){
+        $('<input type="password" placeholder="Confirm Password"></input>').insertAfter($(this).parent().find("input:eq(1)"));
+        $(this).parent().find("#SignInBtn").replaceWith('<button id="SignUpBtn">Sign Up</button>');
+    }
+})
+
 
 $(document).on('click', "#my-recipes", function(){
     window.location = "/myrecipes";
@@ -77,9 +83,27 @@ $(document).on('click', ".page-title", function(){
     window.location = "/";
 })
 
+$(document).on('click', "#SignUpBtn", function(){
+    var name = $(".modal-body").find("input:eq(0)").val();
+    var password = $(".modal-body").find("input:eq(1)").val();
+    var password2 = $(".modal-body").find("input:eq(2)").val();
+
+    if(password != password2){
+        alert("Please confirm your password again.");
+        return;
+    }else{
+        $.post('/create_user', {Username: name, Password: password}, function(res){
+            if(res.success)
+                alert("You are signed up successfully.");
+            else
+                alert("Please use another user name.");
+        })
+    }
+})
+
 $(document).on('click', "#SignInBtn", function(){
     var name = $(".modal-body").find("input:eq(0)").val();
-    var password = $(".modal-body").find("input:eq(1)").val();;
+    var password = $(".modal-body").find("input:eq(1)").val();
 
     localStorage.setItem("userId", name);
     location.reload();
