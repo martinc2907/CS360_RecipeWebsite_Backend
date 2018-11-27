@@ -71,6 +71,7 @@ $(document).on('click', "#sign-up", function(){
     if($("#SignUpBtn").length == 0 ){
         $('<input type="password" placeholder="Confirm Password"></input>').insertAfter($(this).parent().find("input:eq(1)"));
         $(this).parent().find("#SignInBtn").replaceWith('<button id="SignUpBtn">Sign Up</button>');
+        $(this).remove();
     }
 })
 
@@ -105,6 +106,11 @@ $(document).on('click', "#SignInBtn", function(){
     var name = $(".modal-body").find("input:eq(0)").val();
     var password = $(".modal-body").find("input:eq(1)").val();
 
-    localStorage.setItem("userId", name);
-    location.reload();
+    $.post('/sign_in', {Username: name, Password: password}, function(res){
+        if(res.success){
+            localStorage.setItem("userId", name);
+            location.reload();
+        }else
+            alert("Please check if you typed correct username and password.");
+    })
 })
