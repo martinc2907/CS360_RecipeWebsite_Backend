@@ -211,7 +211,7 @@ app.post('/write_review', (req,res)=>{
 
 
 //search for recipe method 1
-app.post("/search_recipe1", (req,res)=>{
+app.post("/search_recipe1",  bodyParser.json(), (req,res)=>{
 	console.log(req.body);
 
 	var min_difficulty = req.body.min_difficulty;
