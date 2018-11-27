@@ -40,6 +40,14 @@ app.get('/', (req, res) => {
 	res.render('home');
 });
 
+app.get('/myrecipes', (req, res) => {
+	res.render('myrecipes');
+});
+
+app.get('/:recipe', (req, res) => {
+	res.render('recipe');
+});
+
 /*----- Supported queries -----*/
 //Create user
 app.post('/create_user', (req,res) =>{

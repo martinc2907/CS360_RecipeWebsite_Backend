@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <% include ./pageHead.ejs %>
         <link rel="stylesheet" type="text/css" href="css/myrecipes.css">
         <link rel="stylesheet" type="text/css" href="css/common.css">
         <link href="https://fonts.googleapis.com/css?family=Ranga" rel="stylesheet">
@@ -10,21 +11,14 @@
     <body>
         <% include ./header.ejs %>
         <div>
-            <div class="main-tab"></div>
+            <div class="main-tab">
+                <div class="recipe"></div>
+            </div>
             <div class="side-tab" style="padding-top: 14px;">
-                <div class="recipe-stack">
-                    <span class="title">Pasta</span>
-                    <span class="meta">Cost: , Time: , Difficulty: , Rating: </span>
-                    <button>Delete</button>
-                </div>
-                <div class="recipe-stack">
-                    <span class="title">Pasta</span>
-                    <span class="meta">Cost: , Time: , Difficulty: , Rating: </span>
-                    <button>Delete</button>
-                </div>
                 <div class="recipe-add">+ Add New</div>
             </div>
         </div>
     </body>
-    <script src="myrecipes.js"></script>
+    <script src="script/common.js"></script>
+    <script src="script/myrecipes.js"></script>
 </html>

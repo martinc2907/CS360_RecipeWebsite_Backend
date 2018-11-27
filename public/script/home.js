@@ -12,23 +12,24 @@ function add_card(title, img_url, cost, time, difficulty, rating){
 	$(".main-tab").append(card);
 }
 
-function add_ingredient(name){
-	var ingre = '<div class="ingredient-card">'+
-                    '<img src="img/ingredients/'+name+'.jpg">'+
-                    '<div class="footer">'+name+'</div>'+
-                '</div>';
-    $("#ingredient-tab").append(ingre);
-}
+$(document).on('click', '.card', function(){
+    var name = $(this).find(".title").text();
+    window.location.href = "./"+name;
+})
+
+$(document).on('click', '.ingredient-card', function(){
+    if($(this).hasClass("checked"))
+        $(this).removeClass('checked');
+    else
+        $(this).addClass('checked');
+})
 
 function init(){
-	if(!localStorage.getItem("userId")){
-		console.log("not logged in");
-		$(".menu-btn").eq(0).hide();
-	}
+	login_state();
 	for(var i=0; i < 12; i++){
 		add_card("Pasta", "./img/pasta.jpg", 10000, 5, 5, 3.5);
-		add_ingredient("Carrot");
 	}
+	ingredient_fullset();
 }
 
 init()

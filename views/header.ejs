@@ -1,9 +1,24 @@
 <div class="page-header" background>
     <img class="header-img" src="img/page-header.png">
-    <div class="page-title">FoodScape</div>
+    <div class="page-title">CollegeBites</div>
+    <div class="page-subtitle">Recipes for college students</div>
     <div class="menu-bar">
-        <button class="menu-btn">My Recipes</button>
-        <button class="menu-btn">Sign In</button>
-        <button class="menu-btn">Sign Up</button>
+        <button class="menu-btn" id="my-recipes">My Recipes</button>
+        <button class="menu-btn" id="sign-in">Sign In</button>
+        <button class="menu-btn" id="sign-out">Sign Out</button>
+        <button class="menu-btn" id="sign-up">Sign Up</button>
     </div>
+</div>
+<div id="signModal" class="modal">
+  	<div class="modal-content">
+    	<div class="modal-header">
+	      	<span class="close">&times;</span>
+	      	Sign In
+    	</div>
+	    <div class="modal-body">
+	      	<input type="text" placeholder="Username"><br>
+            <input type="password" placeholder="Password"><br>
+            <button id="SignInBtn">Sign In</button>
+	    </div>
+  	</div>
 </div>
