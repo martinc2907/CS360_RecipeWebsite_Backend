@@ -80,8 +80,8 @@ function init(){
         for(var i in res){
             add_card(res[i].Title, res[i].Picture_url, res[i].Total_cost, res[i].Time, res[i].Difficulty, res[i].Rating);
         } 
-        ingredient_fullset();
     })
+    ingredient_fullset();
 }
 
 init();

@@ -102,7 +102,10 @@ $(document).on('click', ".addLineBtn", function(){
 })
 
 function init(){
-	login_state();
+	if(!login_state()){
+		window.location = "/";
+		return;
+	}
 	set_recipe_stacks([{title: "Pasta", cost: 10000, time: 5, difficulty: 5, rating: 4.5, img_url: "img/pasta.jpg"},
 					   {title: "Pasta", cost: 10000, time: 5, difficulty: 5, rating: 4.5, img_url: "img/pasta.jpg"},
 					   {title: "Pasta", cost: 10000, time: 5, difficulty: 5, rating: 4.5, img_url: "img/pasta.jpg"},]);

@@ -57,8 +57,10 @@ function login_state(){
         console.log("not logged in");
         $("#my-recipes").hide();
         $("#sign-out").hide();
+        return false;
     }else{
         $("#sign-in").hide();
+        return true;
     }
 }
 
