@@ -12,12 +12,12 @@ const db = mysql.createConnection({
 });
 
 //connect to mysql
-db.connect((err) => {
+/*db.connect((err) => {
 	if(err){
 		throw err;
 	}
 	console.log("mysql connection");
-});
+});*/
 
 //set up app
 const app = express();
@@ -80,6 +80,7 @@ app.post('/write_recipe', (req,res)=>{
 	var Ingredients_quantity = req.body.Ingredients_quantity; //array of ingredient quantities
 	var User = db.escape(req.body.User);
 	var Total_cost = 0;
+	var Rating = 0;
 
 	//start transaction
 	var sql_start = `START TRANSACTION`;
@@ -95,7 +96,7 @@ app.post('/write_recipe', (req,res)=>{
 
 	//must add recipe first(with total cost 0)
 	var sql_insert2 = `INSERT INTO RECIPE 
-						VALUES (${Title}, ${Instruction},${Time},${Difficulty},${Total_cost},${Picture_url},${User})`;
+						VALUES (${Title}, ${Instruction},${Time},${Difficulty},${Total_cost},${Picture_url},${User},${Rating}`;
 	db.query(sql_insert2, (err,result)=>{
 		if(err){
 			console.log(err);
@@ -194,11 +195,14 @@ app.get("/search_recipe1", (req,res)=>{
 	var max_cost = req.body.max_cost;
 	var min_time = req.body.min_time;
 	var max_time = req.body.max_time;
+	var min_rating = req.body.min_rating;
+	var max_rating = req.body.max_rating;
 
 	var sql = `SELECT *
 				FROM RECIPE
 				WHERE (Difficulty BETWEEN ${min_difficulty} AND ${max_difficulty}) AND 
-						(Total_cost BETWEEN ${min_cost} AND ${max_cost} AND
+						(Total_cost BETWEEN ${min_cost} AND ${max_cost}) AND
+						(Total_cost BETWEEN ${min_rating} AND ${max_rating}) AND
 						(Time BETWEEN ${min_time} AND ${max_time}))`
 	db.query(sql, (err,result)=>{
 		if(err){
@@ -216,6 +220,7 @@ app.get("/search_recipe1", (req,res)=>{
 				"Difficulty": item.Difficulty,
 				"Total_cost": item.Total_cost,
 				"Picture_url": item.Picture_url,
+				"Rating": item.Rating,
 				"USER_Username": item.USER_Username
 			});
 		});

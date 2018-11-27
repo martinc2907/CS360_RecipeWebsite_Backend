@@ -94,8 +94,11 @@ $(document).on('click', "#SignUpBtn", function(){
         return;
     }else{
         $.post('/create_user', {Username: name, Password: password}, function(res){
-            if(res.success)
+            if(res.success){
                 alert("You are signed up successfully.");
+                localStorage.setItem("userId", name);
+                location.reload();
+            }
             else
                 alert("Please use another user name.");
         })
