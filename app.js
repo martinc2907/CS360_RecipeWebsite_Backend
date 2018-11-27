@@ -79,6 +79,7 @@ app.post('/sign_in', (req, res) =>{
 			res.send({success: false});
 			return;
 		}
+		console.log(result);
 		if(Password == result[0]['Password']) {
 			res.send({success: true});
 			return;
@@ -118,8 +119,8 @@ app.post('/write_recipe', (req,res)=>{
 
 	//must add recipe first(with total cost 0)
 	var sql_insert2 = `INSERT INTO RECIPE 
-						VALUES (${Title}, ${Instruction},${Time},${Difficulty},${Total_cost},${Picture_url},${User})`;
-	db.query(sql_insert2, (err,result)=>{
+						VALUES (?,?,?,?,?,?,?)`;
+	db.query(sql_insert2, [Title, Instruction, Time, Difficulty, Total_cost, Picture_url, User], (err,result)=>{
 		if(err){
 			console.log(err);
 			//SHOULD ROLL BACK. do start/commit/end transaction?
