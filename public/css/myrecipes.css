@@ -53,8 +53,10 @@
 	border-radius: 5px;
 	padding: 3px;
 	margin: 3px;
-	width: calc(100% - 20px);
+	width: calc(100% - 70px);
 	outline: none;
+	display: inline-block;
+	vertical-align: top;
 }
 
 .instruction-header{

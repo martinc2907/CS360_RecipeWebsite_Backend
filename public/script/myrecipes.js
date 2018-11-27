@@ -15,11 +15,12 @@ function set_recipe(title, cost, time, difficulty, rating, img_url, instructions
                   '<div class="food-instruction">'+
                     '<div class="instruction-header">Instruction</div>'+
                     '<ol>';
-                       	for(var i in instructions){
-        recipe +=           '<li><div contenteditable>'+instructions[i]+'</div>';
-    					}
-        recipe +=   '</ol>'+
-        		  '<button class="redBtn" id="SaveChangeBtn">Save Changes</button>'+
+                    for(var i in instructions){
+        recipe +=       '<li><div contenteditable>'+instructions[i]+'</div><button class="delete">Delete</button></li>';
+    				}
+    	recipe +=		'<li><button class="addLineBtn">Add New Line</button></li>'+
+        		   '</ol>'+
+        		  '<button class="redBtn" id="SaveChangeBtn" style="margin-top: 14px">Save Changes</button>'+
                   '</div>';
     $(".recipe").html(recipe);
     ingredient_fullset();
@@ -68,7 +69,7 @@ function save_changes(){
 }
 
 $(document).on('click', ".recipe-add", function(){
-	set_recipe("", "", "", "", "", "", ["&nbsp", "&nbsp", "&nbsp"], []);
+	set_recipe("", "", "", "", "", "", ["", "", ""], []);
 })
 
 $(document).on('change', "#food-img", function(){
@@ -90,6 +91,14 @@ $(document).on('click', '#SaveChangeBtn', function(){
 		else
 			alert("Failed to upload your recipe.");
 	})
+})
+
+$(document).on('click', ".delete", function(){
+	$(this).parent().remove();
+})
+
+$(document).on('click', ".addLineBtn", function(){
+	$('<li><div contenteditable></div><button class="delete">Delete</button></li>').insertBefore($(this).parent());
 })
 
 function init(){
