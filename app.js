@@ -119,7 +119,7 @@ app.post('/write_recipe', (req,res)=>{
 	});
 	console.log(Instruction);
 	Instruction = Instruction.replace(", ","<NEXT>");
-	
+	console.log(User);
 	//must add recipe first(with total cost 0)
 	var sql_insert2 = `INSERT INTO RECIPE 
 						VALUES (?,?,?,?,?,?,?,?)`;
@@ -212,7 +212,7 @@ app.post('/write_review', (req,res)=>{
 
 
 //search for recipe method 1
-app.get("/search_recipe1", (req,res)=>{
+app.post("/search_recipe1", (req,res)=>{
 	console.log(req.body);
 
 	var min_difficulty = req.body.min_difficulty;
@@ -258,7 +258,7 @@ app.get("/search_recipe1", (req,res)=>{
 
 
 //search for recipe method 2(3 ingredients)
-app.get("/search_recipe2", (req,res)=>{
+app.post("/search_recipe2", (req,res)=>{
 	console.log(req.body);
 
 	var Ingredient1 = db.escape(req.body.Ingredient1);
@@ -306,7 +306,7 @@ app.get("/search_recipe2", (req,res)=>{
 });
 
 // search recipe with name
-app.get("/search_recipe3", (req,res)=>{
+app.post("/search_recipe3", (req,res)=>{
 	console.log(req.body);
 
 	var title = db.escape(req.body.title);
