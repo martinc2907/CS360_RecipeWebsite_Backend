@@ -1,0 +1,262 @@
+body{
+	margin: 0px;
+}
+
+.page-header{
+	height: 200px;
+	border-bottom: 0.5px solid #ccc;
+}
+
+.header-img{
+	width: 100%;
+	opacity: 0.3;
+	height: 200px;
+	object-fit: cover;
+	position: absolute;
+	top: 0px;
+	z-index: -1;
+}
+
+.menu-btn{
+	border: none;
+	outline: none;
+	color: white;
+	font-weight: bold;
+	background: #ff2222;
+	padding: 8px;
+	font-size: 16px;
+	box-shadow: 0 0 3px black;
+	cursor: pointer;
+}
+
+.menu-btn:hover{
+	transform: scale(1.05);
+}
+
+.menu-bar{
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0px;
+    padding: 8px;
+    text-align: right;
+    z-index: 2;
+}
+
+.side-tab{
+	width: 410px;
+	display: inline-block;
+	vertical-align: top;
+	position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0px;
+    border-left: 0.5px solid #ccc;
+    padding-left: 20px;
+}
+
+.side-header{
+	font-weight: bold;
+	font-family: 'Ranga', cursive;
+	color: #ff2222;
+	font-size: 20px;
+	padding: 8px;
+}
+
+.side-content{
+	padding: 8px;
+}
+
+.side-content-box{
+	display: inline-block;
+	width: 150px;
+	vertical-align: top;
+}
+
+.side-content > input, .side-content-box > input{
+	border: 0.5px solid #ccc;
+	border-radius: 5px;
+	padding: 3px;
+	margin: 3px;
+	width: 50px;
+	outline: none;
+	text-align: center;
+}
+
+.main-tab{
+	width: calc(100% - 435px);
+	display: inline-block;
+	vertical-align: top;
+	text-align: center;
+}
+
+.page-title{
+	font-size: 70px;
+	text-shadow: 0 0 3px black;
+	color: #ff2222;
+	font-family: 'Ranga', cursive;
+	height: 75px;
+	text-align: center;
+	padding-top: 30px;
+	user-select: none;
+	cursor: pointer;
+}
+
+.page-subtitle{
+	font-size: 20px;
+	text-shadow: 0 0 3px black;
+	color: #ff2222;
+	font-family: 'Ranga', cursive;
+	height: 40px;
+	text-align: center;
+	padding-top: 0px;
+	text-decoration: underline;
+	user-select: none;
+}
+
+.ingredient-card{
+	width: 70px;
+	height: 70px;
+	display: inline-block;
+	vertical-align: top;
+	position: relative;
+	border: 1px solid #ccc;
+	text-align: center;
+	margin: 3px;
+	cursor: pointer;
+}
+
+.ingredient-card > img{
+	object-fit: cover;
+	width: 99%;
+}
+
+.ingredient-card > .footer{
+	background: rgba(0,0,0,0.5);
+	color: white;
+	position: absolute;
+	bottom: 0px;
+	padding: 2px;
+	width: calc(100% - 4px);
+	user-select: none;
+}
+
+.ingredient-card.checked > .footer{
+	background: rgba(0,172,69,0.9);
+}
+
+.redBtn{
+	border: none;
+	outline: none;
+	color: white;
+	font-weight: bold;
+	background: #ff2222;
+	padding: 8px;
+	font-size: 16px;
+	cursor: pointer;
+	user-select: none;
+	transition: 0.2s;
+}
+
+/*MODAL CSS*/
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 4; /* Sit on top */
+    padding-top: 140px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+@-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0} 
+    to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+.close {
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-header {
+    padding: 8px;
+    background-color: #ff2222;
+    color: white;
+    height: 30px;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.modal-body {
+	padding: 14px;
+	padding-top: 40px;
+	padding-bottom: 40px;
+}
+
+.modal-body > input{
+	border: 0.5px solid #ccc;
+	border-radius: 5px;
+	padding: 3px;
+	margin: 3px;
+	width: 80%;
+	outline: none;
+	text-align: left;
+	font-size: 16px;
+}
+
+.modal-body > button{
+	border: 0.5px solid #ccc;
+	border-radius: 5px;
+	padding: 3px;
+	margin: 3px;
+	width: calc(80% + 8px);
+	outline: none;
+	font-size: 16px;
+	cursor: pointer;
+}
+
+#sign-up{
+	color: coral;
+	text-decoration: underline;
+	cursor: pointer;
+	margin-top: 10px;
+	user-select: none;
+}
+
+.modal-footer {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+}

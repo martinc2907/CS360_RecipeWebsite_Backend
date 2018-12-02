@@ -1,0 +1,138 @@
+.recipe{
+	padding: 20px;
+}
+
+.food-title{
+	font-size: 36px;
+	text-align: left;
+	font-weight: bold;
+}
+
+.food-title > input{
+	border: 0.5px solid #ccc;
+	border-radius: 5px;
+	padding: 3px;
+	margin: 3px;
+	outline: none;
+	font-size: 36px;
+	width: calc(100% - 10px);
+}
+
+.food-meta{
+	color: #888;
+	font-size: 14px;
+}
+
+.food-meta > input{
+	border: 0.5px solid #ccc;
+	border-radius: 5px;
+	padding: 3px;
+	margin: 3px;
+	width: 50px;
+	outline: none;
+	text-align: center;
+}
+
+.food-img{
+	width: 100%;
+	height: 300px;
+	object-fit: cover;
+}
+
+.food-instruction{
+	text-align: left;
+	font-family: 'Roboto', sans-serif;
+}
+
+.food-instruction > ol{
+	margin: 0;
+}
+
+.food-instruction > ol > li > div{
+	border: 0.5px solid #ccc;
+	border-radius: 5px;
+	padding: 3px;
+	margin: 3px;
+	width: calc(100% - 70px);
+	outline: none;
+	display: inline-block;
+	vertical-align: top;
+}
+
+.instruction-header{
+	font-size: 24px;
+	text-align: left;
+	font-weight: bold;
+	margin-top: 8px;
+	font-family: 'Roboto', sans-serif;
+}
+
+.food-meta > input:focus, .food-title > input:focus, .food-instruction > ol > li > div:focus{
+	border-color: #ff2222;
+}
+
+.recipe-stack{
+	border: 0.5px solid #ccc;
+	border-radius: 5px;
+	padding: 8px;
+	width: calc(100% - 35px);
+	margin: 5px;
+	cursor: pointer;
+	position: relative;
+}
+
+.recipe-stack > img{
+	width: 50px;
+	height: 50px;
+	object-fit: cover;
+	vertical-align: middle;
+}
+
+.recipe-stack > div{
+	vertical-align: middle;
+	display: inline-block;
+	padding: 3px;
+}
+
+.recipe-stack > div > .title{
+	font-weight: bold;
+	font-size: 20px;
+	vertical-align: middle;
+}
+
+.recipe-stack > div > .meta{
+	color: #888;
+	font-size: 12px;
+}
+
+.recipe-stack > button{
+	border: 0.5px solid #888;
+	outline: none;
+	padding: 3px;
+	font-size: 14px;
+	cursor: pointer;
+	color: #b90000;
+	background: transparent;
+	vertical-align: middle;
+	position: absolute;
+	right: 8px;
+	top: 20px;
+}
+
+.recipe-stack:hover{
+	background: #efefef;
+}
+
+.recipe-add{
+	border-radius: 16px;
+	padding: 5px;
+	font-size: 16px;
+	color: #00ac45;
+	border: 2px solid #00ac45;
+	font-weight: bold;
+	margin: 0 auto;
+	width: calc(100% - 35px);
+	cursor: pointer;
+	text-align: center;
+	user-select: none;
+}

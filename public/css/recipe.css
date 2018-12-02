@@ -1,0 +1,85 @@
+.recipe{
+	padding: 20px;
+}
+
+.food-title{
+	font-size: 36px;
+	text-align: left;
+	font-weight: bold;
+}
+
+.food-meta{
+	color: #888;
+	font-size: 14px;
+}
+
+.food-img{
+	width: 100%;
+	height: 300px;
+	object-fit: cover;
+}
+
+.food-instruction{
+	text-align: left;
+	font-family: 'Roboto', sans-serif;
+}
+
+.food-instruction > ol{
+	margin: 0;
+}
+
+.instruction-header{
+	font-size: 24px;
+	text-align: left;
+	font-weight: bold;
+	margin-top: 8px;
+}
+
+.review-card{
+	padding: 8px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	margin: 5px;
+}
+
+.review-card > .header{
+
+}
+
+.review-rating{
+	color: #888;
+	font-size: 12px;
+}
+
+.review-card > .text{
+	padding: 3px;
+	font-style: italic;
+	font-family: 'Roboto', sans-serif;
+}
+
+.review-card > .text:before, .review-card > .text:after{
+	content: "\""
+}
+
+.review-box{
+	background: #eee;
+	padding: 4px;
+}
+
+.review-box > div > input{
+	border: 0.5px solid #ccc;
+	border-radius: 5px;
+	padding: 3px;
+	margin: 3px;
+	width: 50px;
+	outline: none;
+	text-align: center;
+}
+
+.review-text{
+	width: calc(100% - 3px);
+	outline: none;
+	border: none;
+	font-size: 16px;
+	font-family: 'Roboto', sans-serif;
+}
