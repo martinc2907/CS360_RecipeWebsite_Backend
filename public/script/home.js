@@ -55,7 +55,7 @@ function filter1(){
     var max_rating = $(".side-content-box:eq(3) > .side-content > input:eq(1)").val();
     if(min_cost.length && max_cost.length && min_time.length && max_time.length &&
         min_difficulty.length && max_difficulty.length && min_rating.length && max_rating.length){
-        return {min_difficulty: min_difficulty, max_difficulty: min_difficulty, 
+        return {min_difficulty: min_difficulty, max_difficulty: max_difficulty, 
             min_cost: min_cost, max_cost: max_cost, 
             min_time: min_time, max_time: max_time, 
             min_rating: min_rating, max_rating: max_rating};

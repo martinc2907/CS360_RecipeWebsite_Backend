@@ -79,6 +79,7 @@ app.post('/write_recipe', (req,res)=>{
 	var Ingredients_quantity = req.body.Ingredients_quantity; //array of ingredient quantities
 	var User = db.escape(req.body.User);
 	var Total_cost = 0;
+	var Rating = 0;
 
 	//join instruction
 	Instruction = "'" + Instruction.join("<NEXT>") + "'";
@@ -97,7 +98,7 @@ app.post('/write_recipe', (req,res)=>{
 
 	//must add recipe first(with total cost 0)
 	var sql_insert2 = `INSERT INTO RECIPE 
-						VALUES (${Title}, ${Instruction},${Time},${Difficulty},${Total_cost},${Picture_url},${User})`;
+						VALUES (${Title}, ${Instruction},${Time},${Difficulty},${Total_cost},${Picture_url},${Rating},${User})`;
 	db.query(sql_insert2, (err,result)=>{
 		if(err){
 			console.log(err);
