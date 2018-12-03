@@ -11,6 +11,7 @@ CREATE TABLE RECIPE(
 	Difficulty INT,
 	Total_cost INT,
 	Picture_url VARCHAR(1000), 
+	Rating FLOAT,
 	USER_Username VARCHAR(15) NOT NULL,
 	PRIMARY KEY(Title),
 	FOREIGN KEY(USER_Username) REFERENCES USER(Username)
