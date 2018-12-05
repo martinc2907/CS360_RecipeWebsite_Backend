@@ -1,0 +1,25 @@
+{
+  "name": "cs360_recipewebsite_backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "mysql": "^2.16.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martinc2907/CS360_RecipeWebsite_Backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/martinc2907/CS360_RecipeWebsite_Backend/issues"
+  },
+  "homepage": "https://github.com/martinc2907/CS360_RecipeWebsite_Backend#readme"
+}
