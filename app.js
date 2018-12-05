@@ -73,8 +73,8 @@ app.post('/sign_in', (req, res) =>{
 			res.send({success: false});
 			return;
 		} else{
-			console.log(Password, typeof(result[0].Password));
-			if(Password == result[0].Password) {
+			console.log(Password, result[0].Password);
+			if(Password == db.escape(result[0].Password)) {
 				res.send({success: true});
 				return;
 			}
@@ -212,7 +212,7 @@ app.post('/write_review', (req,res)=>{
 
 
 //search for recipe method 1
-app.get("/search_recipe1", (req,res)=>{
+app.post("/search_recipe1", (req,res)=>{
 	console.log(req.body);
 
 	var min_difficulty = req.body.min_difficulty;
@@ -243,7 +243,8 @@ app.get("/search_recipe1", (req,res)=>{
 				"Difficulty": item.Difficulty,
 				"Total_cost": item.Total_cost,
 				"Picture_url": item.Picture_url,
-				"USER_Username": item.USER_Username
+				"USER_Username": item.USER_Username,
+				"Rating": item.Rating
 			});
 		});
 		console.log(array);
@@ -254,7 +255,7 @@ app.get("/search_recipe1", (req,res)=>{
 
 
 //search for recipe method 2(3 ingredients)
-app.get("/search_recipe2", (req,res)=>{
+app.post("/search_recipe2", (req,res)=>{
 	console.log(req.body);
 
 	var Ingredient1 = db.escape(req.body.Ingredient1);
