@@ -10,15 +10,6 @@ const db = mysql.createConnection({
 	database: 'recipe',
 });
 
-// const db = mysql.createPool({
-// 	host : 'jihye-mysql.cmlpaiveb1r5.us-east-2.rds.amazonaws.com',
-// 	port: 3306,
-// 	user : 'jihye',
-// 	password : 'makefood',
-// 	database: 'recipe',
-// 	connectionLimit: 20,
-// });
-
 // connect to mysql
 db.connect((err) => {
 	if(err){
@@ -51,11 +42,6 @@ app.get('/:recipe', (req, res) => {
 	res.render('recipe');
 });
 
-
-
-
-
-
 /*----- Supported queries -----*/
 //Create user
 app.post('/create_user', (req,res) =>{
@@ -63,25 +49,7 @@ app.post('/create_user', (req,res) =>{
 
 	var Username = db.escape(req.body.Username);	//escape to keep the quote.
 	var Password = db.escape(req.body.Password);
-	var sql = `INSERT INTO USER (Username, Password) VALUES (${Username}, ${Password})`;
-
-	// db.getConnection(function(err,connection){
-	// 	var query = connection.query({
-	// 		sql: sql,
-	// 		timeout: 10000,
-	// 	}, function(err, rows, fields) {
-	// 		if(err) {
-	// 			console.log(err);
-	// 			res.send({success: false});
-	// 		}
-	// 		else {
-	// 			res.send({successful: true});
-	// 		}
-	// 		connection.release()
-	// 	});
-	// });
-
-	
+	var sql = `INSERT INTO USER (Username, Password) VALUES (${Username}, ${Password})`;	
 
 	db.query(sql, (err,result)=>{
 		if(err){
@@ -93,6 +61,30 @@ app.post('/create_user', (req,res) =>{
 	});
 });
 
+app.post('/sign_in', (req, res) =>{
+	console.log(req.body);
+
+	var Username = db.escape(req.body.Username);
+	var Password = db.escape(req.body.Password);
+	var sql = `SELECT Password FROM USER WHERE Username=${Username}`;
+	db.query(sql, (err, result)=>{
+		if(err){
+			console.log(err);
+			res.send({success: false});
+			return;
+		} else{
+			console.log(Password, typeof(result[0].Password));
+			if(Password == result[0].Password) {
+				res.send({success: true});
+				return;
+			}
+			else {
+				res.send({success: false});
+			}
+		}
+		
+	});
+});
 
 //Write Recipe
 app.post('/write_recipe', (req,res)=>{
@@ -306,6 +298,43 @@ app.get("/search_recipe2", (req,res)=>{
 		console.log(array);
 		console.log("Recipes retrieved");
 		res.send(array);
+	});
+});
+
+// search recipe with name
+app.post("/search_recipe3", (req,res)=>{
+	console.log(req.body);
+
+	var title = db.escape(req.body.title);
+
+	var sql = `SELECT *
+				FROM RECIPE
+				WHERE Title = ${title}
+				`
+	db.query(sql, (err,result)=>{
+		if(err){
+			console.log(err);
+			res.send({"success": false});
+			return;
+		} else {
+			console.log(result);
+			//create json array
+			var array = [];
+			result.map(function(item){
+				array.push({
+					"Title": item.Title,
+					"Instruction": item.Instruction,
+					"Time": item.Time,
+					"Difficulty": item.Difficulty,
+					"Total_cost": item.Total_cost,
+					"Picture_url": item.Picture_url,
+					"USER_Username": item.USER_Username
+				});
+			});
+			console.log(array);
+			console.log("Recipes retrieved");
+			res.send(array);
+		}
 	});
 });
 
