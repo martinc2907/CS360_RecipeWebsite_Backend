@@ -298,34 +298,9 @@ app.post('/write_review', (req,res)=>{
 			console.log(err);
 			res.send({success:false});
 			return;
-		}else{
-			
-			//calculate averate rating
-			var sql_average = `SELECT AVG(Rating) AS AVG
-								FROM REVIEW
-								WHERE RECI_Title = ${RECI_Title}`
-			db.query(sql_average, (err,result)=>{
-				if(err){
-					console.log(err);
-					res.send({success:false});
-					return;
-				}else{
-					var sql2 = `UPDATE RECIPE
-						SET Rating = ${result[0].AVG}`
-					db.query(sql2, (err,result)=>{
-						if(err){
-							console.log(err);
-							res.send({success:false});
-							return;
-						}else{
-							console.log("Review written");
-							res.send({success:true});
-
-						}
-					});
-				}
-			});
 		}
+		console.log("Review written");
+		res.send({success:true});
 	});
 });
 
@@ -379,9 +354,11 @@ app.post("/search_recipe2", (req,res)=>{
 	const ingredientList = req.body.ingredients;
 	var query_str = "SELECT * FROM RECIPE WHERE ";
 	for(var i=0; i<ingredientList.length - 1; i++) {
-		query_str += `Title IN SELECT RECI_Title FROM USES WHERE INGR_Name = ${ingredientList[i]} AND `
+		var ingre = db.escape(ingredientList[i])
+		query_str += `Title IN (SELECT RECI_Title FROM USES WHERE INGR_Name = ${ingre}) AND `
 	}
-	query_str += `Title IN SELECT RECI_Title FROM USES WHERE INGR_Name = ${ingredientList[ingredientList.length-1]}`
+	var ingre = db.escape(ingredientList[ingredientList.length - 1])
+	query_str += `Title IN (SELECT RECI_Title FROM USES WHERE INGR_Name = ${ingre})`
 
 	// var sql = `SELECT *
 	// 			FROM RECIPE
