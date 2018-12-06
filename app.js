@@ -18,6 +18,10 @@ db.connect((err) => {
 	console.log("mysql connection");
 });
 
+process.on('uncaughtException', function (err) {
+    console.log('Caught exception: ' + err);
+});
+
 //set up app
 const app = express();
 app.use(bodyParser.json());	//json object in req.body
@@ -73,12 +77,16 @@ app.post('/sign_in', (req, res) =>{
 			res.send({success: false});
 			return;
 		} else{
-			console.log(Password, result[0].Password);
-			if(Password == db.escape(result[0].Password)) {
-				res.send({success: true});
-				return;
-			}
-			else {
+			try{
+				console.log(Password, result[0].Password);
+				if(Password == db.escape(result[0].Password)) {
+					res.send({success: true});
+					return;
+				}
+				else {
+					res.send({success: false});
+				}
+			}catch(e){
 				res.send({success: false});
 			}
 		}
@@ -94,7 +102,7 @@ app.post('/recipe_reviews',(req,res)=>{
 
 	var sql = `SELECT *
 				FROM REVIEW 
-				WHERE Title = ${RECI_Title}`;
+				WHERE RECI_Title = ${Title}`;
 
 	db.query(sql, (err,result)=>{
 		if(err){

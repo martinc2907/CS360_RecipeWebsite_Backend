@@ -39,7 +39,7 @@ $(document).on('click', '#filter2', function(){
     var filter = filter2();
     if(filter != -1){
         $(".main-tab").html("");
-        $.post('/search_recipe2', filter2(), function(res){
+        $.post('/search_recipe2', {ingredients: filter2()}, function(res){
             for(var i in res)
                 add_card(res[i].Title, res[i].Picture_url, res[i].Total_cost, res[i].Time, res[i].Difficulty, res[i].Rating);
         })
@@ -68,10 +68,10 @@ function filter1(){
 
 function filter2(){
     var selection = extract_selected_ingredients();
-    if(selection.length == 3)
-        return {Ingredient1: selection[0], Ingredient2: selection[1], Ingredient3: selection[2]};
+    if(selection.length > 0)
+        return selection;
     else{
-        alert("Please select exactly three ingredients.");
+        alert("Please at least one ingredient.");
         return -1;
     }
 }
