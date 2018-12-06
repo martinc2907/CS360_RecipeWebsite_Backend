@@ -257,26 +257,28 @@ app.post("/search_recipe1", (req,res)=>{
 //search for recipe method 2(3 ingredients)
 app.post("/search_recipe2", (req,res)=>{
 	console.log(req.body);
+	const ingredientList = req.body.ingredients;
+	var query_str = "SELECT * FROM RECIPE WHERE ";
+	for(var i=0; i<ingredientList.length - 1; i++) {
+		query_str += `Title IN SELECT RECI_Title FROM USES WHERE INGR_Name = ${ingredientList[i]}) AND `
+	}
+	query_str += `Title IN SELECT RECI_Title FROM USES WHERE INGR_Name = ${ingredientList[ingredientList.length-1]})`
 
-	var Ingredient1 = db.escape(req.body.Ingredient1);
-	var Ingredient2 = db.escape(req.body.Ingredient2);
-	var Ingredient3 = db.escape(req.body.Ingredient3);
-
-	var sql = `SELECT *
-				FROM RECIPE
-				WHERE Title IN (SELECT RECI_Title
-								FROM USES
-								WHERE INGR_Name = ${Ingredient1})
-								AND
-					  Title IN (SELECT RECI_Title
-								FROM USES
-								WHERE INGR_Name = ${Ingredient2})
-								AND
-					  Title IN (SELECT RECI_Title
-								FROM USES
-								WHERE INGR_Name = ${Ingredient3})
-				`
-	db.query(sql, (err,result)=>{
+	// var sql = `SELECT *
+	// 			FROM RECIPE
+	// 			WHERE Title IN (SELECT RECI_Title
+	// 							FROM USES
+	// 							WHERE INGR_Name = ${Ingredient1})
+	// 							AND
+	// 				  Title IN (SELECT RECI_Title
+	// 							FROM USES
+	// 							WHERE INGR_Name = ${Ingredient2})
+	// 							AND
+	// 				  Title IN (SELECT RECI_Title
+	// 							FROM USES
+	// 							WHERE INGR_Name = ${Ingredient3})
+	// 			`
+	db.query(query_str, (err,result)=>{
 		if(err){
 			console.log(err);
 			res.send({"success": false});
