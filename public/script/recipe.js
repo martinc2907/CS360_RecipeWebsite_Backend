@@ -27,22 +27,25 @@ function set_recipe(title, cost, time, difficulty, rating, img_url, instructions
 	}
 }
 
+function get_review(){
+	var text = $(".review-text").val();
+	var rating = $("input[type=number]").val();
+	var user = localStorage.getItem("userId");
+	var title = $(".food-title").text();
+
+	return {Content: text, Rating: rating, USER_Username: user, RECI_Title: title};
+}
+
 function init(){
 	login_state();
 	for(var i = 0; i < 10; i++){
 		add_review("DBmaster", 4.5, "This was really good. This was really good. This was really good.")
 	}
-	set_recipe("Pasta", 10000,  5, 5, 4.5, 'img/pasta.jpg', [
-		'Heat 1 tbsp olive oil in a non-stick frying pan then add 1 sliced onion and cook on a medium heat until completely softened, around 15 mins, adding a little splash of water if it starts to stick.', 
-		'Crush in 1 garlic clove and cook for 2-3 mins more, then add 1 tbsp butter.',
-		'Once the butter is foaming a little, add 250g sliced mushrooms and cook for around 5 mins until completely softened.',
-		'Season everything well, then tip onto a plate.',
-		'Tip 1 tbsp plain flour into a bowl with a big pinch of salt and pepper, then toss 500g sliced fillet steak in the seasoned flour.',
-		'Add the steak pieces to the pan, splashing in a little oil if the pan looks dry, and fry for 3-4 mins, until well coloured.',
-		'Tip the onions and mushrooms back into the pan. Whisk 150g crème fraîche, 1 tsp English mustard and 100ml beef stock together, then stir into the pan.',
-		'Cook over a medium heat for around 5 mins.',
-		'Scatter with some chopped parsley, and serve with pappardelle or rice.'],
-		["Carrot", "Carrot", "Carrot", "Carrot", "Carrot", "Carrot", "Carrot", "Carrot"]);
+	var url = window.location.href.split("/");
+	var recipe = decodeURI(url[url.length - 1]);
+	$.post('/search_recipe3', {title: recipe}, function(res){
+        set_recipe(res[0].Title, res[0].Total_cost, res[0].Time, res[0].Difficulty, res[0].Rating, res[0].Picture_url, res[0].Instruction.split("<Next>"), []);
+    })
 }
 
 init()

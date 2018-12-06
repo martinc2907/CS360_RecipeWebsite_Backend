@@ -191,7 +191,6 @@ app.post('/write_recipe', (req,res)=>{
 app.post('/write_review', (req,res)=>{
 	console.log(req.body);
 
-	var Id = req.body.Id;
 	var Content = db.escape(req.body.Content);
 	var Rating = req.body.Rating;
 	var USER_Username = db.escape(req.body.USER_Username);
@@ -293,7 +292,8 @@ app.post("/search_recipe2", (req,res)=>{
 				"Difficulty": item.Difficulty,
 				"Total_cost": item.Total_cost,
 				"Picture_url": item.Picture_url,
-				"USER_Username": item.USER_Username
+				"USER_Username": item.USER_Username,
+				"Rating": item.Rating
 			});
 		});
 		console.log(array);
@@ -329,7 +329,8 @@ app.post("/search_recipe3", (req,res)=>{
 					"Difficulty": item.Difficulty,
 					"Total_cost": item.Total_cost,
 					"Picture_url": item.Picture_url,
-					"USER_Username": item.USER_Username
+					"USER_Username": item.USER_Username,
+					"Rating": item.Rating
 				});
 			});
 			console.log(array);
