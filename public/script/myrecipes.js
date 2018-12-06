@@ -51,6 +51,7 @@ function set_recipe_stacks(recipes){
 						 recipes[idx].Rating, 
 						 recipes[idx].Picture_url);
 	}
+	$(".side-tab").append('<div class="recipe-add">+ Add New</div>');
 }
 
 function save_changes(){
