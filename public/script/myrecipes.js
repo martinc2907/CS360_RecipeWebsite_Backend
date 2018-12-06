@@ -20,7 +20,7 @@ function set_recipe(title, cost, time, difficulty, rating, img_url, instructions
     				}
     	recipe +=		'<li><button class="addLineBtn">Add New Line</button></li>'+
         		   '</ol>'+
-        		  '<button class="redBtn" id="SaveChangeBtn" style="margin-top: 14px">Save Changes</button>'+
+        		  '<button class="redBtn" id="SaveChangeBtn" style="margin-top: 14px">Upload</button>'+
                   '</div>';
     $(".recipe").html(recipe);
     ingredient_fullset();

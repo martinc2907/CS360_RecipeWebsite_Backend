@@ -7,11 +7,11 @@ function add_review(user, rating, text){
 }
 
 function set_recipe(title, cost, time, difficulty, rating, img_url, instructions, ingredients){
-	var recipe = '<div style="text-align: left">'+
+	var recipe =   '<div style="text-align: left">'+
                         '<span class="food-title">'+title+'</span>'+
-                        '<span class="food-meta"> Cost: '+cost+' won, Time: '+time+' min, Difficulty: '+difficulty+', Rating: '+rating+'</span>'+
                     '</div>'+
                     '<img class="food-img" src="'+img_url+'">'+
+                    '<span class="food-meta"> Cost: '+cost+' won, Time: '+time+' min, Difficulty: '+difficulty+', Rating: '+rating+'</span>'+
                     '<div id="ingredient-tab"></div>'+
                     '<div class="food-instruction">'+
                         '<div class="instruction-header">Instruction</div>'+

@@ -55,6 +55,18 @@ $(document).on('click', '#filter2', function(){
     }
 })
 
+$(document).on('click', 'input[type=number]', function(){
+    $(this).select();
+})
+
+$(document).on('change', 'input[type=number]', function(){
+    var val = $(this).val();
+    if(val < 0)
+        $(this).val(0);
+    else if(val > Number($(this).attr("max")))
+        $(this).val($(this).attr("max"));
+})
+
 function filter1(){
     var min_cost = $(".side-content-box:eq(0) > .side-content > input:eq(0)").val();
     var max_cost = $(".side-content-box:eq(0) > .side-content > input:eq(1)").val();
@@ -88,6 +100,10 @@ function filter2(){
 function init(){
 	login_state();
     $.post('/search_recipe1', filter1(), function(res){
+        if(res.success == false){
+            alert("No result :(");
+            return;
+        }
         $(".main-tab").html("");
         for(var i in res){
             add_card(res[i].Title, res[i].Picture_url, res[i].Total_cost, res[i].Time, res[i].Difficulty, res[i].Rating);

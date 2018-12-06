@@ -50,7 +50,7 @@
 
 .card > .title{
 	position: absolute;
-	top: 210px;
+	bottom: 80px;
 	left: 10px;
 	font-size: 36px;
 	color: white;
