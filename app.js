@@ -342,15 +342,22 @@ app.post("/search_recipe1", (req,res)=>{
 	var max_cost = req.body.max_cost;
 	var min_time = req.body.min_time;
 	var max_time = req.body.max_time;
+	var min_rating = req.body.min_rating;
+	var max_rating = req.body.max_rating;
 
 	var sql = `SELECT *
 				FROM RECIPE
 				WHERE (Difficulty BETWEEN ${min_difficulty} AND ${max_difficulty}) AND 
 						(Total_cost BETWEEN ${min_cost} AND ${max_cost} AND
-						(Time BETWEEN ${min_time} AND ${max_time}))`
+						(Time BETWEEN ${min_time} AND ${max_time}) AND
+						(Rating BETWEEN ${min_rating} AND ${max_rating}))`
 	db.query(sql, (err,result)=>{
 		if(err){
 			console.log(err);
+			res.send({success:false});
+			return;
+		}
+		if (result.length == 0) {
 			res.send({success:false});
 			return;
 		}
