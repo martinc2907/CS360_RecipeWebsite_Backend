@@ -48,7 +48,7 @@ function init(){
 	var url = window.location.href.split("/");
 	var recipe = decodeURI(url[url.length - 1]);
 	$.post('/search_recipe3', {title: recipe}, function(res){
-        set_recipe(res[0].Title, res[0].Total_cost, res[0].Time, res[0].Difficulty, res[0].Rating, res[0].Picture_url, res[0].Instruction.split("<NEXT>"), []);
+        set_recipe(res[0].Title, res[0].Total_cost, res[0].Time, res[0].Difficulty, res[0].Rating, res[0].Picture_url, res[0].Instruction.split("<NEXT>"), res[0].Ingredients.map(function(ele){return ele.INGR_Name}));
         $.post('/recipe_reviews', {Title: recipe}, function(res){
         	for(var review of res){
         		add_review(review.USER_Username, review.Rating, review.Content);

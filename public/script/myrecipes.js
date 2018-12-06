@@ -36,19 +36,20 @@ function add_recipe_stack(title, cost, time, difficulty, rating, img_url){
                     	'<span class="title">'+title+'</span><br>'+
                     	'<span class="meta">Cost: '+cost+', Time: '+time+', Difficulty: '+difficulty+', Rating: '+rating+'</span>'+
                     '</div>'+
-                    '<button>Delete</button>'+
+                    '<button class="deleteBtn">Delete</button>'+
                 '</div>';
     $(".side-tab").prepend(stack);
 }
 
 function set_recipe_stacks(recipes){
+	$(".side-tab").html("");
 	for(var idx in recipes){
-		add_recipe_stack(recipes[idx].title, 
-						 recipes[idx].cost, 
-						 recipes[idx].time, 
-						 recipes[idx].difficulty, 
-						 recipes[idx].rating, 
-						 recipes[idx].img_url);
+		add_recipe_stack(recipes[idx].Title, 
+						 recipes[idx].Total_cost, 
+						 recipes[idx].Time, 
+						 recipes[idx].Difficulty, 
+						 recipes[idx].Rating, 
+						 recipes[idx].Picture_url);
 	}
 }
 
@@ -72,6 +73,27 @@ $(document).on('click', ".recipe-add", function(){
 	set_recipe("", "", "", "", "", "", ["", "", ""], []);
 })
 
+$(document).on('click', ".recipe-stack", function(){
+	var recipe = $(this).find("div > .title").text();
+	$.post('/search_recipe3', {title: recipe}, function(res){
+		set_recipe(res[0].Title, res[0].Total_cost, res[0].Time, res[0].Difficulty, res[0].Rating, res[0].Picture_url, res[0].Instruction.split("<NEXT>"), res[0].Ingredients.map(function(ele){return ele.INGR_Name}));
+	})
+})
+
+$(document).on('click', ".deleteBtn", function(){
+	var recipe = $(this).parent().find("div > .title").text();
+	$.post('/delete_recipe', {Title: recipe}, function(res){
+		if(res.success){
+			$.post('/my_page', {Username: localStorage.getItem("userId")}, function(res){
+				set_recipe_stacks(res);
+			})
+			alert("Successfully deleted.");
+		}
+		else
+			alert("Failed to delete.");
+	})
+})
+
 $(document).on('change', "#food-img", function(){
 	var img_url = $(".food-meta > input:eq(2)").val();
 	$(".food-img").prop("src", img_url);
@@ -86,8 +108,12 @@ $(document).on('click', '.ingredient-card', function(){
 
 $(document).on('click', '#SaveChangeBtn', function(){
 	$.post('/write_recipe', save_changes(), function(res){
-		if(res.success)
+		if(res.success){
+			$.post('/my_page', {Username: localStorage.getItem("userId")}, function(res){
+				set_recipe_stacks(res);
+			})
 			alert("Your recipe is successfully uploaded.");
+		}
 		else
 			alert("Failed to upload your recipe.");
 	})
@@ -107,12 +133,10 @@ function init(){
 		return;
 	}
 	$.post('/my_page', {Username: localStorage.getItem("userId")}, function(res){
-		console.log(res);
+		set_recipe_stacks(res);
 	})
-	/*set_recipe_stacks([{title: "Pasta", cost: 10000, time: 5, difficulty: 5, rating: 4.5, img_url: "img/pasta.jpg"},
-					   {title: "Pasta", cost: 10000, time: 5, difficulty: 5, rating: 4.5, img_url: "img/pasta.jpg"},
-					   {title: "Pasta", cost: 10000, time: 5, difficulty: 5, rating: 4.5, img_url: "img/pasta.jpg"},]);*/
-	set_recipe("Pasta", 10000,  5, 5, 4.5, 'img/pasta.jpg', [
+	set_recipe("", "", "", "", "", "", ["", "", ""], []);
+	/*set_recipe("Pasta", 10000,  5, 5, 4.5, 'img/pasta.jpg', [
 		'Heat 1 tbsp olive oil in a non-stick frying pan then add 1 sliced onion and cook on a medium heat until completely softened, around 15 mins, adding a little splash of water if it starts to stick.', 
 		'Crush in 1 garlic clove and cook for 2-3 mins more, then add 1 tbsp butter.',
 		'Once the butter is foaming a little, add 250g sliced mushrooms and cook for around 5 mins until completely softened.',
@@ -122,7 +146,7 @@ function init(){
 		'Tip the onions and mushrooms back into the pan. Whisk 150g crème fraîche, 1 tsp English mustard and 100ml beef stock together, then stir into the pan.',
 		'Cook over a medium heat for around 5 mins.',
 		'Scatter with some chopped parsley, and serve with pappardelle or rice.'],
-		["Carrot", "Pork"]);
+		["Carrot", "Pork"]);*/
 }
 
 init();
