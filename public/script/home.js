@@ -29,6 +29,10 @@ $(document).on('click', '#filter1', function(){
     if(filter != -1){
         $(".main-tab").html("");
         $.post('/search_recipe1', filter1(), function(res){
+            if(res.success == false){
+                alert("No result :(");
+                return;
+            }
             for(var i in res)
                 add_card(res[i].Title, res[i].Picture_url, res[i].Total_cost, res[i].Time, res[i].Difficulty, res[i].Rating);
         })
@@ -37,9 +41,14 @@ $(document).on('click', '#filter1', function(){
 
 $(document).on('click', '#filter2', function(){
     var filter = filter2();
+    console.log(filter);
     if(filter != -1){
         $(".main-tab").html("");
-        $.post('/search_recipe2', {ingredients: filter2()}, function(res){
+        $.post('/search_recipe2', {ingredients: filter}, function(res){
+            if(res.success == false){
+                alert("No result :(");
+                return;
+            }
             for(var i in res)
                 add_card(res[i].Title, res[i].Picture_url, res[i].Total_cost, res[i].Time, res[i].Difficulty, res[i].Rating);
         })

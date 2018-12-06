@@ -150,7 +150,8 @@ app.post('/my_page', (req, res)=>{
 					"Time": item.Time,
 					"Difficulty": item.Difficulty,
 					"Total_cost": item.Total_cost,
-					"Picture_url": item.Picture_url
+					"Picture_url": item.Picture_url,
+					"Rating": item.Rating
 				});
 			});
 
@@ -353,9 +354,9 @@ app.post("/search_recipe2", (req,res)=>{
 	const ingredientList = req.body.ingredients;
 	var query_str = "SELECT * FROM RECIPE WHERE ";
 	for(var i=0; i<ingredientList.length - 1; i++) {
-		query_str += `Title IN SELECT RECI_Title FROM USES WHERE INGR_Name = ${ingredientList[i]}) AND `
+		query_str += `Title IN SELECT RECI_Title FROM USES WHERE INGR_Name = ${ingredientList[i]} AND `
 	}
-	query_str += `Title IN SELECT RECI_Title FROM USES WHERE INGR_Name = ${ingredientList[ingredientList.length-1]})`
+	query_str += `Title IN SELECT RECI_Title FROM USES WHERE INGR_Name = ${ingredientList[ingredientList.length-1]}`
 
 	// var sql = `SELECT *
 	// 			FROM RECIPE
@@ -418,7 +419,7 @@ app.post("/search_recipe3", (req,res)=>{
 			//create json array
 			var array = [];
 			result.map(function(item){
-				var ingredient_sql = `SELECT RECI_Title FROM USES WHERE Title = ${title}`
+				var ingredient_sql = `SELECT INGR_Name FROM USES WHERE RECI_Title = ${title}`
 				db.query(ingredient_sql, (err, result) => {
 					if(err){
 						console.log(err);
