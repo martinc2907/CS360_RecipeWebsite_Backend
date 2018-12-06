@@ -191,14 +191,13 @@ app.post('/write_recipe', (req,res)=>{
 app.post('/write_review', (req,res)=>{
 	console.log(req.body);
 
-	var Id = req.body.Id;
 	var Content = db.escape(req.body.Content);
 	var Rating = req.body.Rating;
 	var USER_Username = db.escape(req.body.USER_Username);
 	var RECI_Title = db.escape(req.body.RECI_Title);
 
-	var sql = `INSERT INTO REVIEW 
-				VALUES (${Id}, ${Content},${Rating},${USER_Username},${RECI_Title})`
+	var sql = `INSERT INTO REVIEW (Content, Rating, USER_Username, RECI_Title)
+				VALUES (${Content},${Rating},${USER_Username},${RECI_Title})`
 	db.query(sql, (err,result)=>{
 		if(err){
 			console.log(err);
