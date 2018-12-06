@@ -312,7 +312,7 @@ app.post('/write_review', (req,res)=>{
 				}else{
 					var sql2 = `UPDATE RECIPE
 						SET Rating = ${result[0].AVG}
-						WHERE RECI_Title = ${RECI_Title}`
+						WHERE Title = ${RECI_Title}`
 					db.query(sql2, (err,result)=>{
 						if(err){
 							console.log(err);
