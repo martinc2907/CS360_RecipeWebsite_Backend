@@ -297,9 +297,34 @@ app.post('/write_review', (req,res)=>{
 			console.log(err);
 			res.send({success:false});
 			return;
+		}else{
+			
+			//calculate averate rating
+			var sql_average = `SELECT AVG(Rating) AS AVG
+								FROM REVIEW
+								WHERE RECI_Title = ${RECI_Title}`
+			db.query(sql_average, (err,result)=>{
+				if(err){
+					console.log(err);
+					res.send({success:false});
+					return;
+				}else{
+					var sql2 = `UPDATE RECIPE
+						SET Rating = ${result[0].AVG}`
+					db.query(sql2, (err,result)=>{
+						if(err){
+							console.log(err);
+							res.send({success:false});
+							return;
+						}else{
+							console.log("Review written");
+							res.send({success:true});
+
+						}
+					});
+				}
+			});
 		}
-		console.log("Review written");
-		res.send({success:true});
 	});
 });
 
