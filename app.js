@@ -410,20 +410,31 @@ app.post("/search_recipe3", (req,res)=>{
 			//create json array
 			var array = [];
 			result.map(function(item){
-				array.push({
-					"Title": item.Title,
-					"Instruction": item.Instruction,
-					"Time": item.Time,
-					"Difficulty": item.Difficulty,
-					"Total_cost": item.Total_cost,
-					"Picture_url": item.Picture_url,
-					"USER_Username": item.USER_Username,
-					"Rating": item.Rating
+				var ingredient_sql = `SELECT RECI_Title FROM USES WHERE Title = ${title}`
+				db.query(ingredient_sql, (err, result) => {
+					if(err){
+						console.log(err);
+						res.send({"success": false});
+						return;	
+					}
+					else {
+						array.push({
+							"Title": item.Title,
+							"Instruction": item.Instruction,
+							"Time": item.Time,
+							"Difficulty": item.Difficulty,
+							"Total_cost": item.Total_cost,
+							"Picture_url": item.Picture_url,
+							"USER_Username": item.USER_Username,
+							"Rating": item.Rating,
+							"Ingredients": result,
+						});
+						console.log(array);
+						console.log("Recipes retrieved");
+						res.send(array);
+					}
 				});
 			});
-			console.log(array);
-			console.log("Recipes retrieved");
-			res.send(array);
 		}
 	});
 });
