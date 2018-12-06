@@ -36,6 +36,12 @@ function get_review(){
 	return {Content: text, Rating: rating, USER_Username: user, RECI_Title: title};
 }
 
+$(document).on('click', "button.redBtn", function(){
+	$.post('/write_review', get_review(), function(res){
+		alert("Your review is successfully submitted!");
+	})
+})
+
 function init(){
 	login_state();
 	for(var i = 0; i < 10; i++){
