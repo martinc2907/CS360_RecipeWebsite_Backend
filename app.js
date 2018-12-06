@@ -258,14 +258,13 @@ app.post('/write_recipe', (req,res)=>{
 app.post('/write_review', (req,res)=>{
 	console.log(req.body);
 
-	var Id = req.body.Id;
 	var Content = db.escape(req.body.Content);
 	var Rating = req.body.Rating;
 	var USER_Username = db.escape(req.body.USER_Username);
 	var RECI_Title = db.escape(req.body.RECI_Title);
 
-	var sql = `INSERT INTO REVIEW 
-				VALUES (${Id}, ${Content},${Rating},${USER_Username},${RECI_Title})`
+	var sql = `INSERT INTO REVIEW (Content, Rating, USER_Username, RECI_Title)
+				VALUES (${Content},${Rating},${USER_Username},${RECI_Title})`
 	db.query(sql, (err,result)=>{
 		if(err){
 			console.log(err);
@@ -324,26 +323,28 @@ app.post("/search_recipe1", (req,res)=>{
 //search for recipe method 2(3 ingredients)
 app.post("/search_recipe2", (req,res)=>{
 	console.log(req.body);
+	const ingredientList = req.body.ingredients;
+	var query_str = "SELECT * FROM RECIPE WHERE ";
+	for(var i=0; i<ingredientList.length - 1; i++) {
+		query_str += `Title IN SELECT RECI_Title FROM USES WHERE INGR_Name = ${ingredientList[i]}) AND `
+	}
+	query_str += `Title IN SELECT RECI_Title FROM USES WHERE INGR_Name = ${ingredientList[ingredientList.length-1]})`
 
-	var Ingredient1 = db.escape(req.body.Ingredient1);
-	var Ingredient2 = db.escape(req.body.Ingredient2);
-	var Ingredient3 = db.escape(req.body.Ingredient3);
-
-	var sql = `SELECT *
-				FROM RECIPE
-				WHERE Title IN (SELECT RECI_Title
-								FROM USES
-								WHERE INGR_Name = ${Ingredient1})
-								AND
-					  Title IN (SELECT RECI_Title
-								FROM USES
-								WHERE INGR_Name = ${Ingredient2})
-								AND
-					  Title IN (SELECT RECI_Title
-								FROM USES
-								WHERE INGR_Name = ${Ingredient3})
-				`
-	db.query(sql, (err,result)=>{
+	// var sql = `SELECT *
+	// 			FROM RECIPE
+	// 			WHERE Title IN (SELECT RECI_Title
+	// 							FROM USES
+	// 							WHERE INGR_Name = ${Ingredient1})
+	// 							AND
+	// 				  Title IN (SELECT RECI_Title
+	// 							FROM USES
+	// 							WHERE INGR_Name = ${Ingredient2})
+	// 							AND
+	// 				  Title IN (SELECT RECI_Title
+	// 							FROM USES
+	// 							WHERE INGR_Name = ${Ingredient3})
+	// 			`
+	db.query(query_str, (err,result)=>{
 		if(err){
 			console.log(err);
 			res.send({"success": false});
@@ -360,7 +361,8 @@ app.post("/search_recipe2", (req,res)=>{
 				"Difficulty": item.Difficulty,
 				"Total_cost": item.Total_cost,
 				"Picture_url": item.Picture_url,
-				"USER_Username": item.USER_Username
+				"USER_Username": item.USER_Username,
+				"Rating": item.Rating
 			});
 		});
 		console.log(array);
@@ -396,7 +398,8 @@ app.post("/search_recipe3", (req,res)=>{
 					"Difficulty": item.Difficulty,
 					"Total_cost": item.Total_cost,
 					"Picture_url": item.Picture_url,
-					"USER_Username": item.USER_Username
+					"USER_Username": item.USER_Username,
+					"Rating": item.Rating
 				});
 			});
 			console.log(array);

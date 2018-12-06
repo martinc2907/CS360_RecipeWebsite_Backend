@@ -1,18 +1,25 @@
 $(document).on('click', '.close', function(){
-	$("#signModal").hide();
+    $("#signModal").hide();
+    $(".modal-body").find("input:eq(2)").remove();
+    $('<div id="sign-up">Sign Up</div>').insertAfter($("#SignUpBtn"));
+    $("#SignUpBtn").replaceWith('<button id="SignInBtn">Sign In</button>');
 });
 
 $(document).on('click', '#sign-in', function(){
-	$("#signModal").show();
+    $("#signModal").show();
 });
 
 window.onclick = function(event) {
-    if (event.target == $("#signModal")[0])
+    if (event.target == $("#signModal")[0]){
         $("#signModal").hide();
+        $(".modal-body").find("input:eq(2)").remove();
+        $('<div id="sign-up">Sign Up</div>').insertAfter($("#SignUpBtn"));
+        $("#SignUpBtn").replaceWith('<button id="SignInBtn">Sign In</button>');
+    }
 }
 
 function add_ingredient(name){
-	var ingre = '<div class="ingredient-card">'+
+    var ingre = '<div class="ingredient-card">'+
                     '<img src="img/ingredients/'+name+'.jpg">'+
                     '<div class="footer">'+name+'</div>'+
                 '</div>';
@@ -20,8 +27,9 @@ function add_ingredient(name){
 }
 
 function ingredient_fullset(){
-    var ingredients = ["Carrot", "Egg", "Beef", "Spinach", "Pork", "Chicken", "Lemon", "Onion", "Tomato", "Salmon", 
-                        "Milk", "Butter", "Rice"];
+    var ingredients = ["Carrot", "Egg", "Beef", "Spinach", "Pork", "Chicken", "Lemon", "Tomato", "Salmon", 
+                        "Milk", "Butter", "Rice", "Tofu", "Sausage", "Shrimp", "Spaghetti", "Potato", "Onion", "Honey", 
+                        "Garlic", "Chilli", "Beans", "Mushroom", "Cheese"];
     for(var i in ingredients){
         add_ingredient(ingredients[i]);
     }
@@ -91,19 +99,21 @@ $(document).on('click', "#SignUpBtn", function(){
     var password = $(".modal-body").find("input:eq(1)").val();
     var password2 = $(".modal-body").find("input:eq(2)").val();
 
-    if(password != password2){
-        alert("Please confirm your password again.");
-        return;
+    if(password == password2){
+        if(!name.includes(",")){
+            $.post('/create_user', {Username: name, Password: password}, function(res){
+                if(res.success){
+                    alert("You are signed up successfully.");
+                    localStorage.setItem("userId", name);
+                    location.reload();
+                }
+                else
+                    alert("Please use another user name.");
+            })
+        }else
+           alert("You cannot use \",\" in your username."); 
     }else{
-        $.post('/create_user', {Username: name, Password: password}, function(res){
-            if(res.success){
-                alert("You are signed up successfully.");
-                localStorage.setItem("userId", name);
-                location.reload();
-            }
-            else
-                alert("Please use another user name.");
-        })
+        alert("Please confirm your password again.");
     }
 })
 

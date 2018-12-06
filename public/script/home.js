@@ -27,6 +27,7 @@ $(document).on('click', '.ingredient-card', function(){
 $(document).on('click', '#filter1', function(){
     var filter = filter1();
     if(filter != -1){
+        $(".main-tab").html("");
         $.post('/search_recipe1', filter1(), function(res){
             for(var i in res)
                 add_card(res[i].Title, res[i].Picture_url, res[i].Total_cost, res[i].Time, res[i].Difficulty, res[i].Rating);
@@ -37,6 +38,7 @@ $(document).on('click', '#filter1', function(){
 $(document).on('click', '#filter2', function(){
     var filter = filter2();
     if(filter != -1){
+        $(".main-tab").html("");
         $.post('/search_recipe2', filter2(), function(res){
             for(var i in res)
                 add_card(res[i].Title, res[i].Picture_url, res[i].Total_cost, res[i].Time, res[i].Difficulty, res[i].Rating);
@@ -77,6 +79,7 @@ function filter2(){
 function init(){
 	login_state();
     $.post('/search_recipe1', filter1(), function(res){
+        $(".main-tab").html("");
         for(var i in res){
             add_card(res[i].Title, res[i].Picture_url, res[i].Total_cost, res[i].Time, res[i].Difficulty, res[i].Rating);
         } 
