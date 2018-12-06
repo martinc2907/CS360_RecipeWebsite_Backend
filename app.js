@@ -216,8 +216,6 @@ app.post('/write_recipe', (req,res)=>{
 		}
 	});
 
-	console.log("CHECK FOR ERROR BUT NO RETURN")
-
 	//must add recipe first	(with total cost 0)
 	var sql_insert2 = `INSERT INTO RECIPE 
 						VALUES (${Title}, ${Instruction},${Time},${Difficulty},${Total_cost},${Picture_url},${Rating},${User})`;
@@ -236,9 +234,10 @@ app.post('/write_recipe', (req,res)=>{
 			var flag = addIngredients(length, Ingredients, Title, Ingredients_quantity, res);
 			setTimeout(function(){
 				if (flag){
-					var sql_sum = `SELECT SUM(I.Cost*U.Ingredient_quantity) AS SUM
-									FROM INGREDIENT AS I,USES AS U 
-									WHERE U.RECI_Title = ${Title} AND U.INGR_Name = I.Name`;
+					var sql_sum = `SELECT SUM(INGREDIENT.Cost*USES.Ingredient_quantity) AS SUM
+									FROM INGREDIENT
+									INNER JOIN USES ON USES.INGR_Name=INGREDIENT.Name
+									WHERE USES.RECI_Title = ${Title}`;
 					db.query(sql_sum, (err,result)=>{
 						if(err){
 							console.log(err);
