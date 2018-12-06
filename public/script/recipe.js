@@ -43,6 +43,14 @@ $(document).on('click', "button.redBtn", function(){
 	})
 })
 
+$(document).on('change', 'input[type=number]', function(){
+    var val = $(this).val();
+    if(val < 0)
+        $(this).val(0);
+    else if(val > Number($(this).attr("max")))
+        $(this).val($(this).attr("max"));
+})
+
 function init(){
 	login_state();
 	var url = window.location.href.split("/");
