@@ -106,9 +106,12 @@ function init(){
 		window.location = "/";
 		return;
 	}
-	set_recipe_stacks([{title: "Pasta", cost: 10000, time: 5, difficulty: 5, rating: 4.5, img_url: "img/pasta.jpg"},
+	$.post('/my_page', {Username: localStorage.getItem("userId")}, function(res){
+		console.log(res);
+	})
+	/*set_recipe_stacks([{title: "Pasta", cost: 10000, time: 5, difficulty: 5, rating: 4.5, img_url: "img/pasta.jpg"},
 					   {title: "Pasta", cost: 10000, time: 5, difficulty: 5, rating: 4.5, img_url: "img/pasta.jpg"},
-					   {title: "Pasta", cost: 10000, time: 5, difficulty: 5, rating: 4.5, img_url: "img/pasta.jpg"},]);
+					   {title: "Pasta", cost: 10000, time: 5, difficulty: 5, rating: 4.5, img_url: "img/pasta.jpg"},]);*/
 	set_recipe("Pasta", 10000,  5, 5, 4.5, 'img/pasta.jpg', [
 		'Heat 1 tbsp olive oil in a non-stick frying pan then add 1 sliced onion and cook on a medium heat until completely softened, around 15 mins, adding a little splash of water if it starts to stick.', 
 		'Crush in 1 garlic clove and cook for 2-3 mins more, then add 1 tbsp butter.',

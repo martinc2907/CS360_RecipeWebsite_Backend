@@ -38,19 +38,22 @@ function get_review(){
 
 $(document).on('click', "button.redBtn", function(){
 	$.post('/write_review', get_review(), function(res){
+		add_review(localStorage.getItem("userId"), $("input[type=number]").val(), $(".review-text").val());
 		alert("Your review is successfully submitted!");
 	})
 })
 
 function init(){
 	login_state();
-	for(var i = 0; i < 10; i++){
-		add_review("DBmaster", 4.5, "This was really good. This was really good. This was really good.")
-	}
 	var url = window.location.href.split("/");
 	var recipe = decodeURI(url[url.length - 1]);
 	$.post('/search_recipe3', {title: recipe}, function(res){
-        set_recipe(res[0].Title, res[0].Total_cost, res[0].Time, res[0].Difficulty, res[0].Rating, res[0].Picture_url, res[0].Instruction.split("<Next>"), []);
+        set_recipe(res[0].Title, res[0].Total_cost, res[0].Time, res[0].Difficulty, res[0].Rating, res[0].Picture_url, res[0].Instruction.split("<NEXT>"), []);
+        $.post('/recipe_reviews', {Title: recipe}, function(res){
+        	for(var review of res){
+        		add_review(review.USER_Username, review.Rating, review.Content);
+        	}
+        })
     })
 }
 
