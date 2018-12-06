@@ -223,28 +223,32 @@ app.post('/write_recipe', (req,res)=>{
 								res.send({success:false});
 								return;
 							}
-							console.log(result);
-							console.log(result[0].SUM);
-							Total_cost = result[0].SUM;
-							console.log(Total_cost);
+							else {
+								console.log(result);
+								console.log(result[0].SUM);
+								Total_cost = result[0].SUM;
+								console.log(Total_cost);
 
 
-							//Update recipe for total cost- do inside of callback for no async problem.
-							var sql_update = `UPDATE RECIPE
-									SET Total_cost = ${Total_cost}
-									WHERE Title = ${Title}`;
-							db.query(sql_update, (err,result)=>{
-								if(err){
-									console.log(err);
-									db.query(sql_rollback, (err,result)=>{});
-									res.send({success:false});
-									return;
-								}
-								//everything success
-								console.log("Recipe written");
-								db.query(sql_commit, (err,result)=>{});
-								res.send({success:true});
-							});
+								//Update recipe for total cost- do inside of callback for no async problem.
+								var sql_update = `UPDATE RECIPE
+										SET Total_cost = ${Total_cost}
+										WHERE Title = ${Title}`;
+								db.query(sql_update, (err,result)=>{
+									if(err){
+										console.log(err);
+										db.query(sql_rollback, (err,result)=>{});
+										res.send({success:false});
+										return;
+									}
+									else{
+										//everything success
+										console.log("Recipe written");
+										db.query(sql_commit, (err,result)=>{});
+										res.send({success:true});
+									}
+								});
+							}
 						});
 					}
 				});
