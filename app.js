@@ -159,7 +159,31 @@ app.post('/my_page', (req, res)=>{
 			res.send(array);
 		}
 	});
-})
+});
+function sleep(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+const addIngredients = async (length, Ingredients, Title, Ingredients_quantity, res) => {
+	console.log(length, Ingredients, Ingredients_quantity);
+	var flag = true;
+	for(var i = 0; i < length; i++){
+		console.log("LOOP", i);
+		var sql_insert = `INSERT INTO USES VALUES (${db.escape(Ingredients[i])}, ${Title},${Ingredients_quantity[i]})`;
+		db.query(sql_insert, (err,result)=>{
+			if(err){
+				console.log(err);
+				//SHOULD ROLL BACK. do start/commit/end transaction?
+				db.query(sql_rollback, (err,result)=>{});
+				res.send({success:false});
+				flag = false;
+			}
+		});
+		await sleep(200);
+	}
+	console.log("Returning...");
+	return flag;
+}
 
 //Write Recipe
 app.post('/write_recipe', (req,res)=>{
@@ -208,59 +232,50 @@ app.post('/write_recipe', (req,res)=>{
 		else {
 			//add to USES
 			var length = Ingredients.length;
-			for(var i = 0; i < length; i++){
-				var sql_insert = `INSERT INTO USES VALUES (${db.escape(Ingredients[i])}, ${Title},${Ingredients_quantity[i]})`;
-				db.query(sql_insert, (err,result)=>{
-					if(err){
-						console.log(err);
-						//SHOULD ROLL BACK. do start/commit/end transaction?
-						db.query(sql_rollback, (err,result)=>{});
-						res.send({success:false});
-						return;
-					}
-					else {
-						//calculate total cost
-						var sql_sum = `SELECT SUM(I.Cost*U.Ingredient_quantity) AS SUM
-										FROM INGREDIENT AS I,USES AS U 
-										WHERE U.RECI_Title = ${Title} AND U.INGR_Name = I.Name`;
-						db.query(sql_sum, (err,result)=>{
-							if(err){
-								console.log(err);
-								//SHOULD ROLL BACK. do start/commit/end transaction?
-								db.query(sql_rollback, (err,result)=>{});
-								res.send({success:false});
-								return;
-							}
-							else {
-								console.log(result);
-								console.log(result[0].SUM);
-								Total_cost = result[0].SUM;
-								console.log(Total_cost);
-
-
-								//Update recipe for total cost- do inside of callback for no async problem.
-								var sql_update = `UPDATE RECIPE
-										SET Total_cost = ${Total_cost}
-										WHERE Title = ${Title}`;
-								db.query(sql_update, (err,result)=>{
-									if(err){
-										console.log(err);
-										db.query(sql_rollback, (err,result)=>{});
-										res.send({success:false});
-										return;
-									}
-									else{
-										//everything success
-										console.log("Recipe written");
-										db.query(sql_commit, (err,result)=>{});
-										res.send({success:true});
-									}
-								});
-							}
-						});
-					}
-				});
-			}
+			const sleepTime = length * 200 + 200;
+			var flag = addIngredients(length, Ingredients, Title, Ingredients_quantity, res);
+			setTimeout(function(){
+				if (flag){
+					var sql_sum = `SELECT SUM(I.Cost*U.Ingredient_quantity) AS SUM
+									FROM INGREDIENT AS I,USES AS U 
+									WHERE U.RECI_Title = ${Title} AND U.INGR_Name = I.Name`;
+					db.query(sql_sum, (err,result)=>{
+						if(err){
+							console.log(err);
+							//SHOULD ROLL BACK. do start/commit/end transaction?
+							db.query(sql_rollback, (err,result)=>{});
+							res.send({success:false});
+							return;
+						}
+						else {
+							console.log(result);
+							console.log(result[0].SUM);
+							Total_cost = result[0].SUM;
+							console.log(Total_cost);
+	
+							//Update recipe for total cost- do inside of callback for no async problem.
+							var sql_update = `UPDATE RECIPE
+									SET Total_cost = ${Total_cost}
+									WHERE Title = ${Title}`;
+							db.query(sql_update, (err,result)=>{
+								if(err){
+									console.log(err);
+									db.query(sql_rollback, (err,result)=>{});
+									res.send({success:false});
+									return;
+								}
+								else{
+									//everything success
+									console.log("Recipe written");
+									db.query(sql_commit, (err,result)=>{});
+									res.send({success:true});
+								}
+							});
+						}
+					});
+				}
+			}, sleepTime);
+			
 		}
 	});
 });
