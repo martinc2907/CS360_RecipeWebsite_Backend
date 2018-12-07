@@ -1,0 +1,6 @@
+DELIMITER $$
+CREATE TRIGGER negative_rating 
+	BEFORE INSERT ON REVIEW
+	FOR EACH ROW
+IF(NEW.Rating < 0) THEN SET NEW.Rating = 0;
+END IF;$$
